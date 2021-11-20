@@ -1,0 +1,10 @@
+[H[Jmake: 'soda' is up to date.
+Parent	Gropoff	WATOff	Names	Truck	Plant	Stud0	Stud1	Mach0	Mach1	Mach2	Cour0
+******	******	******	******	******	******	******	******	******	******	******	*******
+				S
+				P1
+				d1,2			r
+							V1
+							B1,2
+							F
+***********************
