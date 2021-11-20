@@ -1,4 +1,6 @@
 #pragma once
+_Monitor Printer;
+_Task NameServer;
 _Task BottlingPlant {
 	void main();
   public:

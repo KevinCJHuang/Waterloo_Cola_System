@@ -1,5 +1,7 @@
 #pragma once
+#include "WATCard.h"
 
+_Monitor Printer;
 _Task Groupoff {
 	void main();
   public:

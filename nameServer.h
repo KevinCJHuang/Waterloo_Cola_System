@@ -1,4 +1,6 @@
 #pragma once
+_Monitor Printer;
+_Task VendingMachine;
 _Task NameServer {
 	void main();
   public:

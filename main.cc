@@ -1,10 +1,21 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>										// access: getpid
-#include "config.h"
-#include "printer.h"
+
+// Kevin: main.cc may not need to include all these; only included to test compile for now
 #include "bank.h"
+#include "bottlingPlant.h"
+#include "config.h"
+#include "groupOff.h"
+#include "nameServer.h"
 #include "parent.h"
+#include "printer.h"
+#include "student.h"
+#include "truck.h"
+#include "vendingMachine.h"
+#include "WATCard.h"
+#include "WATCardOffice.h"
+
 using namespace std;
 
 int main( int argc, char * argv[] ) {

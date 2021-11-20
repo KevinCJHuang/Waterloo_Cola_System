@@ -1,8 +1,10 @@
 #pragma once
+_Monitor Printer;
+_Task NameServer;
 _Task VendingMachine {
 	void main();
   public:
-	enum Flavours { ... }; 				// flavours of soda (YOU DEFINE)
+	enum Flavours { BBC, CCS, RRB, JZ  }; 				// flavours of soda (YOU DEFINE)
 	_Event Free {};						// free, advertisement
 	_Event Funds {};					// insufficient funds
 	_Event Stock {};					// flavour out of stock

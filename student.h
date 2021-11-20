@@ -1,4 +1,8 @@
 #pragma once
+_Monitor Printer;
+_Task NameServer;
+_Task WATCardOffice;
+_Task Groupoff;
 
 _Task Student {
 	void main();
