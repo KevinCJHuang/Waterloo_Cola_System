@@ -3,6 +3,7 @@
 #include <unistd.h>										// access: getpid
 
 // Kevin: main.cc may not need to include all these; only included to test compile for now
+#include "MPRNG.h"
 #include "bank.h"
 #include "bottlingPlant.h"
 #include "config.h"
@@ -17,7 +18,7 @@
 #include "WATCardOffice.h"
 
 using namespace std;
-
+MPRNG mprng;
 int main( int argc, char * argv[] ) {
   // default values
   ConfigParms configParms;
@@ -44,7 +45,8 @@ int main( int argc, char * argv[] ) {
     << "'d' (default 1) ] ] ]" << endl;
 		exit( EXIT_FAILURE );
 	} // try
-    
+  
+	mprng.set_seed(seed);
   // Init processors
   uProcessor p[processors - 1]; // number of kernel threads
   if ( processors == 1 ) uThisProcessor().setPreemption( 0 );
