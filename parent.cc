@@ -9,8 +9,8 @@ void Parent::main() {
   for ( ;; ) {
     unsigned amount = mprng(1,3);
     unsigned studentId = mprng (0, numStudents - 1);
-    printer.print(Printer::Kind::Parent, 'D', studentId, amount);
     bank.deposit(studentId, amount);
+    printer.print(Printer::Kind::Parent, 'D', studentId, amount);
     yield(parentalDelay);
     _Accept (~Parent) {
       return;
