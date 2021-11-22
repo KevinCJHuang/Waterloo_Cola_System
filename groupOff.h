@@ -3,11 +3,11 @@
 
 _Monitor Printer;
 _Task Groupoff {
-	unsigned int numStudents, sodaCost, groupoffDelay;
+	unsigned int numStudents, sodaCost, groupoffDelay, studentsDone = 0;
 	Printer & printer;
+	WATCard::FWATCard* giftCards;
 	void main();
   public:
-	Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay )
-		:numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), printer(prt) {}
+	Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
 	WATCard::FWATCard giftCard();
 };
