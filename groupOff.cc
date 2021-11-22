@@ -10,12 +10,15 @@ void Groupoff::main() {
 	unsigned int studentsDone = 0;
 	for ( i = 0; i < numStudents; i++) {
 		_Accept (giftCard);
-		printer.print(Printer::Kind::Groupoff, 'D', sodaCost);
 		studentsDone++;
 	}
 
 	for ( i = 0; i < numStudents; i++) {
-		giftCards[i].delivery(new WATCard());
+		yield(groupoffDelay);
+		WATCard* newCard = new WATCard;
+		newCard.deposit(sodaCost);
+		giftCards[i].delivery(newCard);
+		printer.print(Printer::Kind::Groupoff, 'D', sodaCost);
 		_Accept (~Groupoff) { break; } _Else
 	}
 	printer.print(Printer::Kind::Groupoff, 'F');
