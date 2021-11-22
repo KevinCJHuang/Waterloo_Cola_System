@@ -22,7 +22,7 @@ _Task WATCardOffice {
 		void main();
   public:
 		_Event Lost {};							// lost WATCard
-		WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): printer(prt), bank(bank), numCouriers(numCouriers) {};
+		WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers );
 		WATCard::FWATCard create( unsigned int sid, unsigned int amount );
 		WATCard::FWATCard transfer( unsigned int sid, unsigned int amount, WATCard * card );
 		// Job * requestWork();	// Kevin: This is given, but commented to be test compiled.
