@@ -2,9 +2,7 @@
 #include "printer.h"
 
 Groupoff::Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay )
-	:numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), printer(prt) {
-		giftCards = new WATCard::FWATCard [numStudents];
-	}
+	:numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), printer(prt) { }
 
 void Groupoff::main() {
 	printer.print(Printer::Kind::Groupoff, 'S');
