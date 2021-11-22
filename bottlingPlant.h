@@ -8,7 +8,7 @@ _Task BottlingPlant {
 		Printer& printer;
 		NameServer& nameServer;
 		Truck truck;
-		int stock [4];
+		unsigned int stock [4];
 		bool isShutdown = false;
   public:
 		_Event Shutdown {};					// shutdown plant

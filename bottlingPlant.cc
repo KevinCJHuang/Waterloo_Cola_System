@@ -1,6 +1,6 @@
 #include "bottlingPlant.h"
 #include "printer.h"
-#include "NameServer.h"
+#include "nameServer.h"
 #include "MPRNG.h"
 extern MPRNG mprng;
 

@@ -3,13 +3,18 @@
 #include "bottlingPlant.h"
 #include "nameServer.h"
 #include "MPRNG.h"
+#include "vendingMachine.h"
+
 extern MPRNG mprng;
 void Truck::main() {
   printer.print(Printer::Kind::Truck, 'S');
   machineList = nameServer.getMachineList();
-  unsigned int cargo[numFlavours];
-  unsigned int i, bottlesGenerated;
-
+  unsigned int cargo[numFlavours]; // soda cargo on truck
+  unsigned int i;                  // loop index
+  unsigned int bottlesGenerated;   // # of bottles produced by plant
+  unsigned int refilled;           // # of stocks refilled at vm
+  unsigned int flavourEmpty;       // # of flavours with 0 soda left in cargo
+  unsigned int * stock;            // stock of a vending machine
   for ( ;; ) {
     try {
       plant.getShipment(cargo);   
@@ -21,14 +26,21 @@ void Truck::main() {
       break;
     }
 
-
     DELIVERY: for (i = 0 ; i < numVendingMachines; i++) {
-      // numVendingMachines[curvm].restock? Fix!!!!!!!!!!!!!!!
-      for (i = 0; i < numFlavours; i++) {
-        if (cargo[i] == 0) break DELIVERY;
-      } // for
+      stock = machineList[curvm]->inventory();
+      flavourEmpty = 0;
+      for (unsigned int i = 0; i < numFlavours; i++) {
+        refilled = stock[i] + cargo[i] > maxStockPerFlavour ? 
+          (maxStockPerFlavour - stock[i]) : cargo[i];
+        stock[i] += refilled;
+        cargo[i] -= refilled;
+        if (cargo[i] == 0) flavourEmpty++;
+      }
+      machineList[curvm]->restocked();
+
       curvm += 1;
       curvm %= numVendingMachines;
+      if (flavourEmpty == numFlavours) break DELIVERY; // cargo is empty
     } // DELIVERY
 
     // flat tire

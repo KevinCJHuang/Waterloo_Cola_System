@@ -1,6 +1,7 @@
 #pragma once
 #include <uFuture.h>
 class WATCard {
+		unsigned int balance = 0;
 		WATCard( const WATCard & ) = delete;	// prevent copying
 		WATCard & operator=( const WATCard & ) = delete;
   public:
