@@ -3,7 +3,6 @@ _Monitor Printer;
 _Task NameServer;
 _Task WATCardOffice;
 _Task Groupoff;
-#include "vendingMachine.h"  // access: Flavours
 #include "WATCard.h"
 
 _Task Student {
@@ -11,10 +10,8 @@ _Task Student {
 		NameServer& nameServer;
 		WATCardOffice& cardOffice;
 		Groupoff& groupoff;
-		unsigned int id, numPurchases;
-		VendingMachine::Flavours favFlavour;
-		WATCard::FWATCard watCard;
-		WATCard::FWATCard giftCard;
+		unsigned int id, maxPurchases;
+
 
 		void main();
   public:

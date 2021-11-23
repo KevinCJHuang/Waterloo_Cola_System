@@ -12,7 +12,6 @@
 #include "parent.h"
 #include "printer.h"
 #include "student.h"
-#include "truck.h"
 #include "vendingMachine.h"
 #include "WATCard.h"
 #include "WATCardOffice.h"
@@ -54,22 +53,14 @@ int main( int argc, char * argv[] ) {
   processConfigFile(configFile.c_str(), configParms); // Read configs
 
 	Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers);
-	printer.print(Printer::Kind::Truck, 'S');
-	printer.print(Printer::Kind::Truck, 'P', 1);
-	printer.print(Printer::Kind::Truck, 'd', 1, 2);
-	printer.print(Printer::Kind::Student, 1, 'r');
-	printer.print(Printer::Kind::Student, 1, 'V', 1);
-	printer.print(Printer::Kind::Student, 1, 'B', 1, 2);
-	printer.print(Printer::Kind::Student, 1, 'F');
-
-	// printer.print(Printer::Kind::Parent, 'S');
-	// printer.print(Printer::Kind::BottlingPlant, 'S');
-	// printer.print(Printer::Kind::Truck, 'P', 6);
-	// printer.print(Printer::Kind::Student, 1, 'S');
-	// printer.print(Printer::Kind::Student, 0, 'F');
-
-	// printer.print(Printer::Kind::Truck, 'd', 0, 6);
-	// printer.print(Printer::Kind::Truck, 'S');
-	// printer.print(Printer::Kind::Truck, 'D', 0, 14);
+	Bank
+	parent
+	WATCardOffice
+	Groupoff
+	NameServer
+	
+	numVendingMachines
+	bottlingPlant
+	students
 
 } // main
