@@ -16,7 +16,7 @@ void Groupoff::main() {
 	for ( i = 0; i < numStudents; i++) {
 		yield(groupoffDelay);
 		WATCard* newCard = new WATCard;
-		newCard.deposit(sodaCost);
+		newCard->deposit(sodaCost);
 		giftCards[i].delivery(newCard);
 		printer.print(Printer::Kind::Groupoff, 'D', sodaCost);
 		_Accept (~Groupoff) { break; } _Else
