@@ -27,6 +27,7 @@ void Truck::main() {
     }
 
     DELIVERY: for (i = 0 ; i < numVendingMachines; i++) {
+      printer.print(Printer::Kind::Truck, 'd', i, bottlesGenerated);
       stock = machineList[curvm]->inventory();
       flavourEmpty = 0;
       for (unsigned int i = 0; i < numFlavours; i++) {
@@ -38,8 +39,14 @@ void Truck::main() {
       }
       machineList[curvm]->restocked();
 
+      int notReplenished = 0; // to find the total number of bottles not replenished
+      for (int j = 0; j < numFlavours; j++)
+        notReplenished += cargo[j];
+      printer.print(Printer::Kind::Truck, 'U', i, notReplenished);
+      
       curvm += 1;
       curvm %= numVendingMachines;
+      printer.print(Printer::Kind::Truck, 'D', i, cargo[i]);
       if (flavourEmpty == numFlavours) break DELIVERY; // cargo is empty
     } // DELIVERY
 
