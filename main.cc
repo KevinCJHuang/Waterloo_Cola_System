@@ -52,15 +52,35 @@ int main( int argc, char * argv[] ) {
 
   processConfigFile(configFile.c_str(), configParms); // Read configs
 
-	Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers);
-	Bank
-	parent
-	WATCardOffice
-	Groupoff
-	NameServer
-	
-	numVendingMachines
-	bottlingPlant
-	students
+  // Create everything
+	Printer printer(configParms.NumStudents, configParms.NumVendingMachines, configParms.NumCouriers);
+	Bank bank(configParms.NumStudents);
+	Parent parent(printer, bank, configParms.NumStudents, configParms.ParentalDelay);
+	WATCardOffice wOffice(printer, bank, configParms.NumCouriers);
+	Groupoff groupOff(printer, configParms.NumStudents, configParms.SodaCost, configParms.GroupoffDelay);
+	NameServer nameServer(printer, configParms.NumVendingMachines, configParms.NumStudents);
+	VendingMachine** vendingMachines = new VendingMachine[configParms.NumVendingMachines];
+	for (int i = 0; i < configParms.NumVendingMachines; i++) {
+		vendingMachines[i] = new VendingMachine(printer, nameServer, i, configParms.SodaCost);
+	}
+	BottlingPlant plant = new bottlingPlant(printer, nameServer,
+			configParms.NumVendingMachines, configParms.MaxShippedPerFlavour,
+			configParms.MaxStockPerFlavour, configParms.TimeBetweenShipments);
+	Students** students = new Student[configParms.NumStudents];
+	for (int i = 0; i < configParms.NumStudents; i++) {
+		students[i] = new Student(printer, nameServer, wOffice, groupOff, i);
+	}
+
+	// wait till all students finish and delete them
+	for (int i = 0; i < configParms.NumStudents; i++) {
+		delete students[i];
+	}
+	delete students;
+
+	delete plant;
+	for (int i = 0; i < configParms.NumVendingMachines; i++) {
+		delete vendingMachines[i];
+	}
+	delete vendingMachines;
 
 } // main

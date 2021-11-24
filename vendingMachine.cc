@@ -9,6 +9,7 @@ VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned
 
 void VendingMachine::main() {
   nameServer.VMregister(this);
+  printer.print(Printer::Kind::Vending, 'S', sodaCost);
   for ( ;; ) {
     try {
       _Accept (buy) {
@@ -23,6 +24,7 @@ void VendingMachine::main() {
       }
     } // try
   } // for
+  printer.print(Printer::Kind::Vending, 'F');
 }
 
 
@@ -32,13 +34,19 @@ void VendingMachine::buy( Flavours flavour, WATCard & card ) {
   if (stock[flavour] <= 0) throw Stock();
   if (!mprng(4)) {
     isFree = true;
+    printer.print(Printer::Kind::Vending, 'A');
     throw Free();
+  } else {
+    printer.print(Printer::Kind::Vending, 'B', flavour, stock[flavour]);
   }
   card.withdraw(sodaCost);
 }
 
 unsigned int * VendingMachine::inventory() { return stock; }
-void VendingMachine::restocked() { }
+void VendingMachine::restocked() { 
+  printer.print(Printer::Kind::Vending, 'r');
+  printer.print(Printer::Kind::Vending, 'R');
+}
 _Nomutex unsigned int VendingMachine::cost() const { return sodaCost; }
 _Nomutex unsigned int VendingMachine::getId() const { return id; }
 

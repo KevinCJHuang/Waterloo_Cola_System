@@ -43,15 +43,22 @@ void WATCardOffice::main() {
 
 void WATCardOffice::Courier::setParent(WATCardOffice* parent) { this->parent = parent; }
 void WATCardOffice::Courier::main() {
+  printer.print(Printer::Kind::Courier, 'S');
   WATCardOffice::Job* job;
   for ( ;; ) {
     job = parent->requestWork();
+    printer.print(Printer::Kind::Courier, 't', job->args.sid, job->args.amount);
     parent->bank.withdraw( job->args.sid, job->args.amount );
     job->args.card->deposit(job->args.amount);
 
-    mprng (5) == 0
-      ? job->result.exception(new WATCardOffice::Lost()) // Lost
-      : job->result.delivery(job->args.card);            // delivered
+    if (mprng (5) == 0) {
+      job->result.exception(new WATCardOffice::Lost()); // Lost
+      printer.print(Printer::Kind::Courier, 'L', job->args.sid);
+    } else {
+      job->result.delivery(job->args.card);            // delivered
+      printer.print(Printer::Kind::Courier, 'T', job->args.sid, job->args.amount);
+    }
     delete job;
   }
+  printer.print(Printer::Kind::Courier, 'F');
 }
