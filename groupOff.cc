@@ -1,11 +1,12 @@
 #include "groupOff.h"
 #include "printer.h"
-
+#include "WATCard.h"
 Groupoff::Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay )
 	:numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), printer(prt) { }
 
 void Groupoff::main() {
 	printer.print(Printer::Kind::Groupoff, 'S');
+	giftCards = new WATCard::FWATCard[numStudents];
 	unsigned int i;
 	unsigned int studentsDone = 0;
 	for ( i = 0; i < numStudents; i++) {

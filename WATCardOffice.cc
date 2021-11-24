@@ -1,11 +1,14 @@
 #include "WATCardOffice.h"
 #include "bank.h"
 #include "MPRNG.h"
+#include "printer.h"
+
 extern MPRNG mprng;
 WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): printer(prt), bank(bank), numCouriers(numCouriers) {
   couriers = new Courier [numCouriers];
   for (unsigned int i = 0; i < numCouriers; i++) {
     couriers[i].setParent(this); 
+    couriers[i].setId(i);
   }
 };
 
@@ -42,23 +45,27 @@ void WATCardOffice::main() {
 }
 
 void WATCardOffice::Courier::setParent(WATCardOffice* parent) { this->parent = parent; }
+void WATCardOffice::Courier::setId(unsigned int id) { this->id = id; }
+
 void WATCardOffice::Courier::main() {
-  printer.print(Printer::Kind::Courier, 'S');
+  _Accept (setParent);
+  _Accept (setId);
+  parent->printer.print(Printer::Kind::Courier, id, 'S');
   WATCardOffice::Job* job;
   for ( ;; ) {
     job = parent->requestWork();
-    printer.print(Printer::Kind::Courier, 't', job->args.sid, job->args.amount);
+    parent->printer.print(Printer::Kind::Courier, 't', job->args.sid, job->args.amount);
     parent->bank.withdraw( job->args.sid, job->args.amount );
     job->args.card->deposit(job->args.amount);
 
     if (mprng (5) == 0) {
       job->result.exception(new WATCardOffice::Lost()); // Lost
-      printer.print(Printer::Kind::Courier, 'L', job->args.sid);
+      parent->printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
     } else {
       job->result.delivery(job->args.card);            // delivered
-      printer.print(Printer::Kind::Courier, 'T', job->args.sid, job->args.amount);
+      parent->printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
     }
     delete job;
   }
-  printer.print(Printer::Kind::Courier, 'F');
+  parent->printer.print(Printer::Kind::Courier, id, 'F');
 }

@@ -18,9 +18,11 @@ _Task WATCardOffice {
 		};
 		_Task Courier {
 				WATCardOffice* parent;
+				unsigned int id;
 				void main();
-			public: 
+			public:
 				void setParent(WATCardOffice* parent);
+				void setId(unsigned int id);
 		};					// communicates with bank
 
 

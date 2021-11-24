@@ -12,6 +12,7 @@ void BottlingPlant::main() {
   unsigned int generatedBottles;
 
   for ( ;; ) {
+  if (isShutdown) break;
     yield(timeBetweenShipments);
     generatedBottles=0;
     // Perform a production run
@@ -22,12 +23,16 @@ void BottlingPlant::main() {
     printer.print(Printer::Kind::BottlingPlant, 'G', generatedBottles);
 
     try {
-      _Accept (getShipment);
+      _Accept (getShipment) {}
+      or _Accept (~BottlingPlant) {
+        isShutdown = true;
+        _Accept (getShipment)
+      }
     } catch (uMutexFailure::RendezvousFailure &) { // Shutdown
+      printer.print(Printer::Kind::BottlingPlant, 'F');
       break;
     }
   }
-  printer.print(Printer::Kind::BottlingPlant, 'F');
 }
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {

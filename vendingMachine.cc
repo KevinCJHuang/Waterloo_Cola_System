@@ -2,6 +2,7 @@
 #include "MPRNG.h"
 #include "WATCard.h"
 #include "nameServer.h"
+#include "printer.h"
 extern MPRNG mprng;
 
 VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned int id, unsigned int sodaCost ): sodaCost(sodaCost), id(id), nameServer(nameServer), printer(prt) {}
@@ -9,7 +10,7 @@ VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned
 
 void VendingMachine::main() {
   nameServer.VMregister(this);
-  printer.print(Printer::Kind::Vending, 'S', sodaCost);
+  printer.print(Printer::Kind::Vending, id, 'S', sodaCost);
   for ( ;; ) {
     try {
       _Accept (buy) {
@@ -24,7 +25,7 @@ void VendingMachine::main() {
       }
     } // try
   } // for
-  printer.print(Printer::Kind::Vending, 'F');
+  printer.print(Printer::Kind::Vending, id, 'F');
 }
 
 
@@ -34,18 +35,18 @@ void VendingMachine::buy( Flavours flavour, WATCard & card ) {
   if (stock[flavour] <= 0) throw Stock();
   if (!mprng(4)) {
     isFree = true;
-    printer.print(Printer::Kind::Vending, 'A');
+    printer.print(Printer::Kind::Vending, id, 'A');
     throw Free();
   } else {
-    printer.print(Printer::Kind::Vending, 'B', flavour, stock[flavour]);
+    printer.print(Printer::Kind::Vending, id, 'B', flavour, stock[flavour]);
   }
   card.withdraw(sodaCost);
 }
 
 unsigned int * VendingMachine::inventory() { return stock; }
 void VendingMachine::restocked() { 
-  printer.print(Printer::Kind::Vending, 'r');
-  printer.print(Printer::Kind::Vending, 'R');
+  printer.print(Printer::Kind::Vending, id, 'r');
+  printer.print(Printer::Kind::Vending, id, 'R');
 }
 _Nomutex unsigned int VendingMachine::cost() const { return sodaCost; }
 _Nomutex unsigned int VendingMachine::getId() const { return id; }

@@ -18,5 +18,3 @@ void Parent::main() {
   }
   printer.print(Printer::Kind::Parent, 'F');
 }
-
-
