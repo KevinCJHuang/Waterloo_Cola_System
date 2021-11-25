@@ -1,31 +1,160 @@
-seed is: 19
-Parent	Gropoff	WATOff	Names	Truck	Plant	Stud0	Mach0	Cour0
-*******	*******	*******	*******	*******	*******	*******	*******	*******
-S	S	S	S
-			R0		S	S1,2	S2	S
-		C0,5	N0,0	S	G4	V0
+Parent	Gropoff	WATOff	Names	Truck	Plant	Stud0	Stud1	Mach0	Mach1	Mach2	Cour0
+*******	*******	*******	*******	*******	*******	*******	*******	*******	*******	*******	*******
+S	S	S	S		S			S2			S
+			R0						S2
+D1,3			R1		G3					S2
+			R2	S	P
+				P3
+				d0,3		S1,2		r
+		C0,5		U0,17		V0
+D1,3			N0,0	D0,0			S1,7	R
+		W	N1,1		G4		V1				t0,5
 				P4	P
-D0,3		W		d0,4			r	t0,5
-				U0,16
-				D0,0	G5		R
+		C1,5		d1,4					r
+				U1,16
+D0,1				D1,0	G5				R
 				P5	P
-D0,1				d0,5			r
-				U0,11
-	D2			D0,0	G4		R
-	F			P4	P
-D0,2				d0,4			r	T0,5
-				U0,7
-				D0,0	G1		R
-				P1	P	G1,0	B1,3
-D0,3				d0,1			r
-				U0,7
-				D0,0	G7		R
-				P7	P
-				d0,7		B1,3	B1,2
-D0,3				U0,4	G2	F	r
-D0,3				D0,3			R
-D0,3		W	F	F	F		F	F
-D0,1		F
-D0,2
+				d2,5						r
+				U2,15
+D0,2				D2,0	G9					R
+				P9	P
+	D2			d0,9				r
+				U0,8
+D0,1				D0,0	G8		a1,2	R	A
+				P8	P	G1,0		B1,5
+				d1,8					r
+				U1,9
+D1,2				D1,0	G8				R
+				P8	P
+	D2			d2,8						r
+	F			U2,7
+D0,2		W		D2,0	G5					R	T0,5
+											t1,5
+				P5	P						T1,5
+				d0,5			B1,3	r	B1,4
+				U0,5
+				D0,1
+D1,3				d1,1	G2			R	r
+						B1,3		B1,5
+				U1,9		F
+				D1,0
+				X					R
+D0,2							A1,3		A
+D0,1				P2	P
+				d2,2						r
+				U2,5
+D0,1				D2,0	G9		B1,1		B1,3	R
+				P9	P
+				d0,9				r
+				U0,1
+				D0,4
+				d1,4	G5			R	r
+				U1,7
+				D1,0	P
+				P5
+D1,1				d2,5					R	r
+				U2,4
+				D2,4
+		T1,7		d0,4	G6			r		R
+				D0,3
+		W		d1,3							t1,7
+D1,2				U1,4				R	r		T1,7
+				D1,0	P
+				P6
+				d2,6					R	r
+				U2,1			A1,8		A
+				D2,3
+				d0,3	G3			r		R
+				D0,3
+D0,3				d1,3				R	r
+				U1,5
+				D1,3	P
+				P3
+				d2,3					R	r
+				D2,2
+D0,1				d0,2	G8		B1,6	r	B1,2	R
+				D0,2
+				d1,2				R	r
+				U1,6
+				D1,2	P
+				P8
+D0,2				d2,8					R	r
+				D2,8
+				d0,8	G7			r		R
+				D0,8
+				d1,8				R	r
+				U1,1
+				D1,3	P
+				P7
+D0,3				d2,7					R	r
+				D2,7			A1,6		A
+				d0,7	G4			r		R
+				D0,7
+D0,1				d1,7				R	r
+				D1,5	P
+				P4
+				d2,4					R	r
+				D2,4
+				d0,4	G6			r		R
+				D0,4
+D0,3				d1,4				R	r
+				D1,4	P
+				P6
+				d2,6					R	r
+				D2,6			B1,4		B1,5
+D1,2				d0,6	G4			r		R
+				D0,6
+				d1,6				R	r
+				U1,1
+				D1,6	P
+				P4
+				d2,4					R	r
+				D2,4
+D1,1				d0,4	G5			r		R
+				D0,4
+				d1,4				R	r
+				D1,3	P
+				P5
+D0,2				d2,5					R	r
+				D2,5			B1,2		B1,5
+				d0,5	G5			r		R
+				D0,5
+				d1,5				R	r
+				U1,1
+				D1,5	P
+				P5
+D1,1				d2,5					R	r
+				D2,5
+				d0,5	G4			r		R
+				D0,5
+D0,3				d1,5				R	r
+				U1,1
+				D1,5	P
+				P4
+				d2,4					R	r
+				D2,4			B1,0		B1,4
+				d0,4	G9			r		R
+				D0,4
+D0,3				d1,4				R	r
+				U1,2
+				D1,4	P
+				P9
+				d2,9					R	r
+				D2,9
+D1,1		T1,7		d0,9	G7			r		R
+				D0,9
+		W		d1,9				R			t1,7
+				D1,7	P				r		T1,7
+				P7
+D0,1				d2,7					R	r
+							B1,5		B1,5
+				D2,7			F
+				d0,7	G6			r		R
+				D0,7
+D1,1				d1,7				R	r
+				D1,6
+D0,3				F	F			F	R
+D0,2		W	F						F	F	F
+D0,2		F
 F
 ***********************

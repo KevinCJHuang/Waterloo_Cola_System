@@ -5,6 +5,11 @@
 
 extern MPRNG mprng;
 WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): printer(prt), bank(bank), numCouriers(numCouriers) {
+  couriers = new Courier* [numCouriers];
+  // Courier* couriers [numCouriers];
+  for (unsigned int i = 0; i < numCouriers; i++) {
+    couriers[i] = new Courier (printer, i, this);
+  }
 };
 
 WATCardOffice::~WATCardOffice() {
@@ -30,10 +35,8 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 
 void WATCardOffice::main() {
   printer.print(Printer::Kind::WATCardOffice, 'S');
-  Courier* couriers [numCouriers];
-  for (unsigned int i = 0; i < numCouriers; i++) {
-    couriers[i] = new Courier (i, this);
-  }
+
+  // cout << "watcardOff: courisers created " << endl;
 
   for ( ;; ) {
     _Accept (create) {
@@ -61,23 +64,24 @@ void WATCardOffice::main() {
 }
 
 void WATCardOffice::Courier::main() {
-  parent->printer.print(Printer::Kind::Courier, id, 'S');
+  // cout << "courier printing: " << endl;
+  printer.print(Printer::Kind::Courier, id, 'S');
   WATCardOffice::Job* job;
   for ( ;; ) {
     job = parent->requestWork();
     if (job->args.end) break;
-    parent->printer.print(Printer::Kind::Courier, id, 't', job->args.sid, job->args.amount);
+    printer.print(Printer::Kind::Courier, id, 't', job->args.sid, job->args.amount);
     parent->bank.withdraw( job->args.sid, job->args.amount );
     job->args.card->deposit(job->args.amount);
 
     if (mprng (5) == 0) {
       job->result.exception(new WATCardOffice::Lost()); // Lost
-      parent->printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
+      printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
     } else {
       job->result.delivery(job->args.card);            // delivered
-      parent->printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
+      printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
     }
     delete job;
   }
-  parent->printer.print(Printer::Kind::Courier, id, 'F');
+  printer.print(Printer::Kind::Courier, id, 'F');
 }

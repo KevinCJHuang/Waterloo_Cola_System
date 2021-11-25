@@ -37,22 +37,34 @@ Printer::~Printer() {
 }
 
 void Printer::print( Kind kind, char state ) {
+	// cout << "printer: " << kind << ", " << state << endl;
 	insertState(PState(kind, state));
 }
 void Printer::print( Kind kind, char state, unsigned int value1 ) {
+	// cout << "printer: " << kind << ", " << state << endl;
+
 	insertState(PState(kind, state, value1));
 }
 void Printer::print( Kind kind, char state, unsigned int value1, unsigned int value2 ) {
+	// cout << "printer: " << kind << ", " << state << endl;
+
 	insertState(PState(kind, state, value1, value2));
 }
 void Printer::print( Kind kind, unsigned int lid, char state ) {
+	// cout << "printer: " << kind << ", " << lid << ", " << state << endl;
+
 	insertState(PState(kind, lid, state));
 }
 void Printer::print( Kind kind, unsigned int lid, char state, unsigned int value1) {
+	// cout << "printer: " << kind << ", " << lid << ", "<< state << endl;
+
 	insertState(PState(kind, lid, state, value1));
 }
 void Printer::print( Kind kind, unsigned int lid, char state, unsigned int value1,
+
 	unsigned int value2 ) {
+		// cout << "printer: " << kind << ", " << lid << ", "<< state << endl;
+
 	insertState(PState(kind, lid, state, value1, value2));
 }
 

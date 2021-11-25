@@ -46,7 +46,6 @@ int main( int argc, char * argv[] ) {
 	} // try
   
 	mprng.set_seed(seed);
-	cout << "seed is: " << seed << endl;
   // Init processors
   uProcessor p[processors - 1]; // number of kernel threads
   if ( processors == 1 ) uThisProcessor().setPreemption( 0 );
@@ -78,7 +77,6 @@ int main( int argc, char * argv[] ) {
 		for (unsigned int i = 0; i < configParms.numStudents; i++) {
 			delete students[i];
 		}
-		// parent.~Parent();
 	} // delete plant before vm
 	
 	

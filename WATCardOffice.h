@@ -18,11 +18,12 @@ _Task WATCardOffice {
 			Job( Args args ) : args( args ) {}
 		};
 		_Task Courier {
+				Printer& printer;
 				WATCardOffice* parent;
 				unsigned int id;
 				void main();
 			public:
-				Courier (unsigned int id, WATCardOffice* parent): id(id), parent(parent) {}
+				Courier (Printer& printer, unsigned int id, WATCardOffice* parent): id(id), parent(parent), printer(printer) {}
 				// void setParent(WATCardOffice* parent);
 				// void setId(unsigned int id);
 		};					// communicates with bank
@@ -36,7 +37,7 @@ _Task WATCardOffice {
 		WATCard::FWATCard curFCard;
 		// unsigned int curAmount;
 		Job* curJob;
-		
+		Courier** couriers;
 
 		void main();
   public:

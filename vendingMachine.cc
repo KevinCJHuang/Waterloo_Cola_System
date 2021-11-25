@@ -11,6 +11,7 @@ VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned
 void VendingMachine::main() {
   nameServer.VMregister(this);
   printer.print(Printer::Kind::Vending, id, 'S', sodaCost);
+
   for ( ;; ) {
     try {
       _Accept (~VendingMachine) {break;}
