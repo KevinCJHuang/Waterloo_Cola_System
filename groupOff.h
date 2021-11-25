@@ -9,5 +9,6 @@ _Task Groupoff {
 	void main();
   public:
 	Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
+	~Groupoff();
 	WATCard::FWATCard giftCard();
 };

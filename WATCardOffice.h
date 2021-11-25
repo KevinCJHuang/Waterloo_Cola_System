@@ -9,6 +9,7 @@ _Task WATCardOffice {
 			unsigned int sid;
 			unsigned int amount;
 			WATCard* card = nullptr;
+			bool end = false;
 		};
 
 		struct Job { // marshalled arguments and return future
@@ -35,12 +36,13 @@ _Task WATCardOffice {
 		WATCard::FWATCard curFCard;
 		// unsigned int curAmount;
 		Job* curJob;
-
+		
 
 		void main();
   public:
 		_Event Lost {};							// lost WATCard
 		WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers );
+		~WATCardOffice();
 		WATCard::FWATCard create( unsigned int sid, unsigned int amount );
 		WATCard::FWATCard transfer( unsigned int sid, unsigned int amount, WATCard * card );
 		Job * requestWork();

@@ -6,13 +6,14 @@ extern MPRNG mprng;
 
 void BottlingPlant::main() {
   Truck truck (printer, nameServer, *this, numVendingMachines, maxStockPerFlavour);
-  yield(timeBetweenShipments); // yield before first shipment
   printer.print(Printer::Kind::BottlingPlant, 'S');
 
   unsigned int generatedBottles;
 
   for ( ;; ) {
   if (isShutdown) break;
+    yield(timeBetweenShipments); // yield before first shipment
+
     generatedBottles=0;
     // Perform a production run
     for (unsigned int i = 0; i < 4; i++) {
@@ -22,18 +23,17 @@ void BottlingPlant::main() {
 
     printer.print(Printer::Kind::BottlingPlant, 'G', generatedBottles);
 
-    try {
-      _Accept (getShipment) {}
-      or _Accept (~BottlingPlant) {
-        isShutdown = true;
+    _Accept (getShipment) {}
+    or _Accept (~BottlingPlant) {
+      isShutdown = true;
+      try {
         _Accept (getShipment)
-      }
-    } catch (uMutexFailure::RendezvousFailure &) { // Shutdown
-      printer.print(Printer::Kind::BottlingPlant, 'F');
+      } catch (uMutexFailure::RendezvousFailure &) { }// Shutdown
       break;
     }
-    yield(timeBetweenShipments); // yield before each shipment
+    // yield(timeBetweenShipments); // yield before each shipment
   }
+  printer.print(Printer::Kind::BottlingPlant, 'F');
 }
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {

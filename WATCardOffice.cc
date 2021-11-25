@@ -12,6 +12,9 @@ WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCourie
   }
 };
 
+WATCardOffice::~WATCardOffice() {
+  delete [] couriers;
+}
 WATCard::FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount ) {
   curArg = Args {sid, amount};
   curFCard = WATCard::FWATCard();
@@ -26,7 +29,7 @@ WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount
 }
 
 WATCardOffice::Job * WATCardOffice::requestWork() {
-  printer.print(Printer::Kind::WATCardOffice, 'W');
+  if (!(curJob->args.end)) printer.print(Printer::Kind::WATCardOffice, 'W');
   return curJob;
 }
 
@@ -42,7 +45,14 @@ void WATCardOffice::main() {
       curJob = new Job (curArg);   // Create new job
       curJob->result = curFCard;    // Set new job's FWATCard result
       _Accept(requestWork);        // Let courier do the work
-    } or _Accept (~WATCardOffice) { break; }
+    } or _Accept (~WATCardOffice) {
+      curJob = new Job (Args{0,0,nullptr, true});   // Create new job
+      for (unsigned int i = 0; i < numCouriers; i++) {
+        _Accept(requestWork);        // Let courier do the work
+      }
+      delete curJob;
+      break;
+    }
   }
   printer.print(Printer::Kind::WATCardOffice, 'F');
 }
@@ -57,6 +67,7 @@ void WATCardOffice::Courier::main() {
   WATCardOffice::Job* job;
   for ( ;; ) {
     job = parent->requestWork();
+    if (job->args.end) break;
     parent->printer.print(Printer::Kind::Courier, id, 't', job->args.sid, job->args.amount);
     parent->bank.withdraw( job->args.sid, job->args.amount );
     job->args.card->deposit(job->args.amount);

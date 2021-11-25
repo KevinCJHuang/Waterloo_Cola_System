@@ -33,7 +33,7 @@ Printer::~Printer() {
     }
   }
   cout << "***********************" << endl;
-	delete buffer;
+  delete []buffer;
 }
 
 void Printer::print( Kind kind, char state ) {

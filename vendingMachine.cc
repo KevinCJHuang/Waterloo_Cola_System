@@ -13,10 +13,13 @@ void VendingMachine::main() {
   printer.print(Printer::Kind::Vending, id, 'S', sodaCost);
   for ( ;; ) {
     try {
-      _Accept (buy) {
+      _Accept (~VendingMachine) {break;}
+      or _Accept (buy) {
         stock[lastFlavour]--;
       } or _Accept (inventory) {
+        printer.print(Printer::Kind::Vending, id, 'r');
         _Accept (restocked);
+        printer.print(Printer::Kind::Vending, id, 'R');
       }
     } catch (uMutexFailure::RendezvousFailure &) {
       if (isFree) { // Free drink; needs to decrement stock
@@ -45,8 +48,6 @@ void VendingMachine::buy( Flavours flavour, WATCard & card ) {
 
 unsigned int * VendingMachine::inventory() { return stock; }
 void VendingMachine::restocked() { 
-  printer.print(Printer::Kind::Vending, id, 'r');
-  printer.print(Printer::Kind::Vending, id, 'R');
 }
 _Nomutex unsigned int VendingMachine::cost() const { return sodaCost; }
 _Nomutex unsigned int VendingMachine::getId() const { return id; }

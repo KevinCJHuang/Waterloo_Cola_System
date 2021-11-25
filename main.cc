@@ -55,14 +55,6 @@ int main( int argc, char * argv[] ) {
 
   // Create everything
 	Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers);
-	// printer.print(Printer::Kind::Parent, 'D', 1, 1);
-	// printer.print(Printer::Kind::WATCardOffice, 'W');
-	// printer.print(Printer::Kind::NameServer, 'N', 0, 0);
-	// printer.print(Printer::Kind::Truck, 'D', 0, 0);
-	// printer.print(Printer::Kind::BottlingPlant, 'G', 3);
-	// printer.print(Printer::Kind::Courier, 0, 't', 0, 5);
-
-	// printer.print(Printer::Kind::Parent, 'D', 1, 1);
 	Bank bank(configParms.numStudents);
 	Parent parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
 	WATCardOffice wOffice(printer, bank, configParms.numCouriers);
@@ -72,22 +64,24 @@ int main( int argc, char * argv[] ) {
 	for (unsigned int i = 0; i < configParms.numVendingMachines; i++) {
 		vendingMachines[i] = new VendingMachine(printer, nameServer, i, configParms.sodaCost);
 	}
-	BottlingPlant plant(printer, nameServer,
+	
+	{
+		BottlingPlant plant(printer, nameServer,
 			configParms.numVendingMachines, configParms.maxShippedPerFlavour,
 			configParms.maxStockPerFlavour, configParms.timeBetweenShipments);
-	Student* students[configParms.numStudents];
-	for (unsigned int i = 0; i < configParms.numStudents; i++) {
-		students[i] = new Student(printer, nameServer, wOffice, groupOff, i, configParms.maxPurchases);
-	}
+		Student* students[configParms.numStudents];
+		for (unsigned int i = 0; i < configParms.numStudents; i++) {
+			students[i] = new Student(printer, nameServer, wOffice, groupOff, i, configParms.maxPurchases);
+		}
 
-	// wait till all students finish and delete them
-	for (unsigned int i = 0; i < configParms.numStudents; i++) {
-		delete students[i];
-	}
-
-	plant.~BottlingPlant();
-	parent.~Parent();
-
+		// wait till all students finish and delete them
+		for (unsigned int i = 0; i < configParms.numStudents; i++) {
+			delete students[i];
+		}
+		// parent.~Parent();
+	} // delete plant before vm
+	
+	
 	for (unsigned int i = 0; i < configParms.numVendingMachines; i++) {
 		delete vendingMachines[i];
 	}

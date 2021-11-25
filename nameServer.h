@@ -10,7 +10,7 @@ _Task NameServer {
 
   public:
 		NameServer( Printer & prt, unsigned int numVendingMachines, unsigned int numStudents );
-		~NameServer();
+		// ~NameServer();
 		void VMregister( VendingMachine * vendingmachine );
 		VendingMachine * getMachine( unsigned int id );
 		VendingMachine ** getMachineList();

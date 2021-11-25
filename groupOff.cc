@@ -28,3 +28,7 @@ void Groupoff::main() {
 WATCard::FWATCard Groupoff::giftCard() {
 	return giftCards[studentsDone];
 }
+
+Groupoff::~Groupoff() {
+	delete [] giftCards;
+}

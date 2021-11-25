@@ -22,8 +22,8 @@ void Truck::main() {
   // cout << endl << "stockCap: " <<  stockCap << endl;
 
   for ( ;; ) {
+    _Accept(~Truck) {break;} _Else
     cargoRemaining = 0;
-    stockSize = 0;
     try {
       plant.getShipment(cargo);
       // cout << endl << "cargo begin: " <<  cargo[0] << ", "<< cargo[1] << ", "<< cargo[2] << ", "<< cargo[3] << endl;
@@ -39,6 +39,7 @@ void Truck::main() {
     }
 
     for (i = 0 ; i < numVendingMachines; i++) {
+      stockSize = 0;
       printer.print(Printer::Kind::Truck, 'd', curvm, cargoRemaining);
       stock = machineList[curvm]->inventory();
       // cout << "stock: " << stock[0] << endl;
@@ -52,12 +53,12 @@ void Truck::main() {
       }
       machineList[curvm]->restocked();
 
-      // cout << endl << "cargo end: " <<  cargo[0] << ", "<< cargo[1] << ", "<< cargo[2] << ", "<< cargo[3] << endl;
-
-
       // check whether vm is filled or not
-      if (stockSize != stockCap)
+      if (stockSize != stockCap) {
+
         printer.print(Printer::Kind::Truck, 'U', curvm, stockCap - stockSize);
+
+      }
       
       // curvm ++;
       // curvm %= numVendingMachines;
@@ -73,6 +74,5 @@ void Truck::main() {
       yield(10);
     }
   }
-
   printer.print(Printer::Kind::Truck, 'F');
 }
