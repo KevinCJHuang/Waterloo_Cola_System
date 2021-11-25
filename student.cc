@@ -17,18 +17,21 @@ void Student::main() {
   unsigned int numPurchases = mprng(1, maxPurchases);
   VendingMachine::Flavours favFlavour = 
     static_cast<VendingMachine::Flavours>(mprng(0, 3));
+  cout << endl << "studnets mprng used" << endl;
 
-  VendingMachine* vm = nameServer.getMachine(id);
   printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
 
-  printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
   WATCard::FWATCard watCard = cardOffice.create(id, 5);
   WATCard::FWATCard giftCard = groupoff.giftCard();
+  VendingMachine* vm = nameServer.getMachine(id);
+  printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
   unsigned int purchased = 0;
   for ( ;; ) {
   if (purchased == numPurchases) break;
+    cout << "student mprng yield" << endl;
+
     yield(mprng(1, 10));
 
 

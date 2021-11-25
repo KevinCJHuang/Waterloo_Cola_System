@@ -2,5 +2,6 @@
 clear
 make soda 
 
-./soda d 19 > output.txt
-./sodaAnswer d 19 > answer.txt
+seed=$((1 + $RANDOM % 10))
+./soda d $seed > output.txt
+./sodaAnswer d $seed > answer.txt

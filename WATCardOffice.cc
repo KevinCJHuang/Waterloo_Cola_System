@@ -75,9 +75,12 @@ void WATCardOffice::Courier::main() {
     job->args.card->deposit(job->args.amount);
 
     if (mprng (5) == 0) {
+      cout << endl << "courier mprng" << endl;
       job->result.exception(new WATCardOffice::Lost()); // Lost
       printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
     } else {
+        cout << endl << "courier mprng" << endl;
+
       job->result.delivery(job->args.card);            // delivered
       printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
     }

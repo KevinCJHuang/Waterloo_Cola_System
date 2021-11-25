@@ -73,6 +73,8 @@ void Truck::main() {
       printer.print(Printer::Kind::Truck, 'X');
       yield(10);
     }
+    cout << endl << "truck flattire mprng" << endl;
+
   }
   printer.print(Printer::Kind::Truck, 'F');
 }

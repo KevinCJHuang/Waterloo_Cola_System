@@ -5,8 +5,8 @@
 extern MPRNG mprng;
 
 void BottlingPlant::main() {
-  Truck truck (printer, nameServer, *this, numVendingMachines, maxStockPerFlavour);
   printer.print(Printer::Kind::BottlingPlant, 'S');
+  Truck truck (printer, nameServer, *this, numVendingMachines, maxStockPerFlavour);
 
   unsigned int generatedBottles;
 
@@ -20,6 +20,7 @@ void BottlingPlant::main() {
       stock[i] = mprng(0, maxShippedPerFlavour);
       generatedBottles += stock[i];
     }
+    cout << endl << "plant bottles generated" << endl;
 
     printer.print(Printer::Kind::BottlingPlant, 'G', generatedBottles);
 
