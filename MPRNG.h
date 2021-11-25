@@ -14,7 +14,7 @@
 //   mprng( 5, 21 )
 
 #pragma once
-
+#include <iostream>
 _Monitor MPRNG {
 	unsigned int PRNGcnt = 0;
 	unsigned int seed;

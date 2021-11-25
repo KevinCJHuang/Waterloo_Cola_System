@@ -46,6 +46,7 @@ int main( int argc, char * argv[] ) {
 	} // try
   
 	mprng.set_seed(seed);
+	cout << "seed is: " << seed << endl;
   // Init processors
   uProcessor p[processors - 1]; // number of kernel threads
   if ( processors == 1 ) uThisProcessor().setPreemption( 0 );
@@ -54,7 +55,14 @@ int main( int argc, char * argv[] ) {
 
   // Create everything
 	Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers);
+	// printer.print(Printer::Kind::Parent, 'D', 1, 1);
+	// printer.print(Printer::Kind::WATCardOffice, 'W');
+	// printer.print(Printer::Kind::NameServer, 'N', 0, 0);
+	// printer.print(Printer::Kind::Truck, 'D', 0, 0);
+	// printer.print(Printer::Kind::BottlingPlant, 'G', 3);
+	// printer.print(Printer::Kind::Courier, 0, 't', 0, 5);
 
+	// printer.print(Printer::Kind::Parent, 'D', 1, 1);
 	Bank bank(configParms.numStudents);
 	Parent parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
 	WATCardOffice wOffice(printer, bank, configParms.numCouriers);
@@ -78,9 +86,10 @@ int main( int argc, char * argv[] ) {
 	}
 
 	plant.~BottlingPlant();
+	parent.~Parent();
+
 	for (unsigned int i = 0; i < configParms.numVendingMachines; i++) {
 		delete vendingMachines[i];
 	}
-	parent.~Parent();
 } // main
 

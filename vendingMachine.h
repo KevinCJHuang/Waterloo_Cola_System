@@ -11,7 +11,7 @@ _Task VendingMachine {
 		Printer& printer;
 		Flavours lastFlavour; // Flavour of last purchase
 		bool isFree = false;  // Last purchase is free
-		unsigned int stock [4];
+		unsigned int stock [4] {0,0,0,0};
  		void main();
 
   public:

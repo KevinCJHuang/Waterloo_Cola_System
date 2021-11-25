@@ -13,7 +13,7 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines,
 
 	// Print second line
 	for (unsigned int i = 0; i < 5 + numStudents + numVendingMachines + numCouriers; i++) {
-		cout << "******\t";
+		cout << "*******\t";
 	}
 	cout << "*******" << endl;
 

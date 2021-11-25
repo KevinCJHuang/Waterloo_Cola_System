@@ -14,23 +14,19 @@ id(id), maxPurchases(maxPurchases) {}
 
 
 void Student::main() {
-  cout << endl << "Student main starts: " << id << endl;
-
   unsigned int numPurchases = mprng(1, maxPurchases);
-  unsigned int purchased = 0;
   VendingMachine::Flavours favFlavour = 
     static_cast<VendingMachine::Flavours>(mprng(0, 3));
+  // cout << "Studnet" << id << ": fav flavour: " << favFlavour << "num purchase: " << numPurchases << endl;
+  printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
+
   VendingMachine* vm = nameServer.getMachine(id);
-  cout << endl << "Student vm got : " << id << endl;
+  printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
   WATCard::FWATCard watCard = cardOffice.create(id, 5);
-  cout << endl << "Student 1 cards got : " << id << endl;
-
   WATCard::FWATCard giftCard = groupoff.giftCard();
-  cout << endl << "Student 2 cards got : " << id << endl;
 
-  printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
-  printer.print(Printer::Kind::Student, id, 'V', vm->getId());
+  unsigned int purchased = 0;
   for ( ;; ) {
   if (purchased == numPurchases) break;
     yield(mprng(1, 10));

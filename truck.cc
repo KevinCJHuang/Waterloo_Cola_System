@@ -7,8 +7,9 @@
 
 extern MPRNG mprng;
 void Truck::main() {
-  printer.print(Printer::Kind::Truck, 'S');
   machineList = nameServer.getMachineList();
+  printer.print(Printer::Kind::Truck, 'S');
+
   unsigned int cargo[numFlavours]; // soda cargo on truck
   unsigned int cargoRemaining;
   unsigned int i;                  // loop index
@@ -18,23 +19,29 @@ void Truck::main() {
   unsigned int * stock;            // stock of a vending machine
   unsigned int stockSize;
   const unsigned int stockCap = maxStockPerFlavour * numFlavours; // capacity of a vm
+  // cout << endl << "stockCap: " <<  stockCap << endl;
+
   for ( ;; ) {
     cargoRemaining = 0;
     stockSize = 0;
     try {
-      plant.getShipment(cargo);   
+      plant.getShipment(cargo);
+      // cout << endl << "cargo begin: " <<  cargo[0] << ", "<< cargo[1] << ", "<< cargo[2] << ", "<< cargo[3] << endl;
       bottlesGenerated = 0;
-      for (i = 0; i < numFlavours; i++)
+      for (i = 0; i < numFlavours; i++) {
         bottlesGenerated += cargo[i];
         cargoRemaining += cargo[i];
+      }
+      // cout << endl << "truck" << bottlesGenerated<< endl;
       printer.print(Printer::Kind::Truck, 'P', bottlesGenerated);
     } catch (BottlingPlant::Shutdown &) { // Shutdown
       break;
     }
 
     for (i = 0 ; i < numVendingMachines; i++) {
-      printer.print(Printer::Kind::Truck, 'd', i, cargoRemaining);
+      printer.print(Printer::Kind::Truck, 'd', curvm, cargoRemaining);
       stock = machineList[curvm]->inventory();
+      // cout << "stock: " << stock[0] << endl;
       for (unsigned int i = 0; i < numFlavours; i++) { // refill vending machine
         refilled = stock[i] + cargo[i] > maxStockPerFlavour ? 
           (maxStockPerFlavour - stock[i]) : cargo[i];
@@ -45,12 +52,17 @@ void Truck::main() {
       }
       machineList[curvm]->restocked();
 
+      // cout << endl << "cargo end: " <<  cargo[0] << ", "<< cargo[1] << ", "<< cargo[2] << ", "<< cargo[3] << endl;
+
+
       // check whether vm is filled or not
       if (stockSize != stockCap)
-        printer.print(Printer::Kind::Truck, 'U', i, stockCap - stockSize);
+        printer.print(Printer::Kind::Truck, 'U', curvm, stockCap - stockSize);
       
+      // curvm ++;
+      // curvm %= numVendingMachines;
+      printer.print(Printer::Kind::Truck, 'D', curvm, cargoRemaining);
       curvm = ++curvm % numVendingMachines;
-      printer.print(Printer::Kind::Truck, 'D', i, cargoRemaining);
       if (cargoRemaining == 0 ) break; // cargo is empty
     } // for
 

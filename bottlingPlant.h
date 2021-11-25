@@ -7,8 +7,7 @@ _Task BottlingPlant {
 		unsigned int numVendingMachines, maxShippedPerFlavour, maxStockPerFlavour, timeBetweenShipments; 
 		Printer& printer;
 		NameServer& nameServer;
-		Truck truck;
-		unsigned int stock [4];
+		unsigned int stock [4] = {0};
 		bool isShutdown = false;
   public:
 		_Event Shutdown {};					// shutdown plant
@@ -17,6 +16,6 @@ _Task BottlingPlant {
 			unsigned int maxStockPerFlavour, unsigned int timeBetweenShipments )
 			: numVendingMachines(numVendingMachines), maxShippedPerFlavour(maxShippedPerFlavour),
 			maxStockPerFlavour(maxStockPerFlavour), timeBetweenShipments(timeBetweenShipments),
-			printer(prt), nameServer(nameServer), truck (printer, nameServer, *this, numVendingMachines, maxStockPerFlavour){};
+			printer(prt), nameServer(nameServer) {};
 		void getShipment( unsigned int cargo[] );
 };

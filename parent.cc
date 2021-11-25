@@ -7,14 +7,19 @@ extern MPRNG mprng;
 void Parent::main() {
   printer.print(Printer::Kind::Parent, 'S');
   for ( ;; ) {
+
     unsigned amount = mprng(1,3);
     unsigned studentId = mprng (0, numStudents - 1);
-    bank.deposit(studentId, amount);
-    printer.print(Printer::Kind::Parent, 'D', studentId, amount);
+        // cout << endl << "parent: amount: " << amount << "studentId: " << studentId << endl;
+
     yield(parentalDelay);
+
+
     _Accept (~Parent) {
       return;
     } _Else
+    bank.deposit(studentId, amount);
+    printer.print(Printer::Kind::Parent, 'D', studentId, amount);
   }
   printer.print(Printer::Kind::Parent, 'F');
 }
