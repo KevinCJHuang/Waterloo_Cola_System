@@ -7,9 +7,9 @@ NameServer::NameServer( Printer & prt, unsigned int numVendingMachines, unsigned
   :printer(prt), numVendingMachines(numVendingMachines), numStudents(numStudents) {
 }
 
-// NameServer::~NameServer() {
-//   delete [] machineList;
-// }
+NameServer::~NameServer() {
+  delete [] machineList;
+}
 
 void NameServer::VMregister( VendingMachine * vendingmachine ) {
   curId = vendingmachine->getId();
@@ -28,8 +28,8 @@ VendingMachine ** NameServer::getMachineList() {
 
 void NameServer::main() {
   printer.print(Printer::Kind::NameServer, 'S');
-  VendingMachine* tempMachineList [numVendingMachines];
-  machineList = tempMachineList;
+  // VendingMachine* tempMachineList [numVendingMachines];
+  machineList = new VendingMachine* [numVendingMachines];
 
   unsigned int tempStudVMs [numStudents]; // fixed
   studVMs = tempStudVMs; // points to local array
@@ -38,7 +38,7 @@ void NameServer::main() {
   for (unsigned i = 0; i < numStudents; i++) {
     studVMs[i] = i % numVendingMachines;
   }
-  
+
   for (unsigned i = 0; i < numVendingMachines; i++) {
     _Accept (VMregister);
   }

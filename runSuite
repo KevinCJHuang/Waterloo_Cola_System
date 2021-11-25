@@ -1,5 +1,6 @@
 #!/bin/bash
 clear
 make soda 
-./soda d 55718 1 > output.txt
-./sodaAnswer d 55718 1 > answer.txt
+
+./soda d 19 > output.txt
+./sodaAnswer d 19 > answer.txt

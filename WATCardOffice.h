@@ -22,15 +22,15 @@ _Task WATCardOffice {
 				unsigned int id;
 				void main();
 			public:
-				void setParent(WATCardOffice* parent);
-				void setId(unsigned int id);
+				Courier (unsigned int id, WATCardOffice* parent): id(id), parent(parent) {}
+				// void setParent(WATCardOffice* parent);
+				// void setId(unsigned int id);
 		};					// communicates with bank
 
 
 		unsigned int numCouriers;
 		Bank& bank;
 		Printer& printer;
-		Courier* couriers;
 		Args curArg;
 		// unsigned int curId;
 		WATCard::FWATCard curFCard;

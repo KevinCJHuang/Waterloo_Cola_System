@@ -5,15 +5,10 @@
 
 extern MPRNG mprng;
 WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): printer(prt), bank(bank), numCouriers(numCouriers) {
-  couriers = new Courier [numCouriers];
-  for (unsigned int i = 0; i < numCouriers; i++) {
-    couriers[i].setParent(this); 
-    couriers[i].setId(i);
-  }
 };
 
 WATCardOffice::~WATCardOffice() {
-  delete [] couriers;
+
 }
 WATCard::FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount ) {
   curArg = Args {sid, amount};
@@ -35,6 +30,11 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 
 void WATCardOffice::main() {
   printer.print(Printer::Kind::WATCardOffice, 'S');
+  Courier* couriers [numCouriers];
+  for (unsigned int i = 0; i < numCouriers; i++) {
+    couriers[i] = new Courier (i, this);
+  }
+
   for ( ;; ) {
     _Accept (create) {
       curArg.card = new WATCard(); // Create new card for courier
@@ -46,23 +46,21 @@ void WATCardOffice::main() {
       curJob->result = curFCard;    // Set new job's FWATCard result
       _Accept(requestWork);        // Let courier do the work
     } or _Accept (~WATCardOffice) {
-      curJob = new Job (Args{0,0,nullptr, true});   // Create new job
+      Job curJob (Args{0,0,nullptr, true});   // Create new job
       for (unsigned int i = 0; i < numCouriers; i++) {
         _Accept(requestWork);        // Let courier do the work
       }
-      delete curJob;
+      for (int unsigned i = 0; i < numCouriers; i++) {
+        delete couriers[i];
+      }
       break;
     }
   }
+
   printer.print(Printer::Kind::WATCardOffice, 'F');
 }
 
-void WATCardOffice::Courier::setParent(WATCardOffice* parent) { this->parent = parent; }
-void WATCardOffice::Courier::setId(unsigned int id) { this->id = id; }
-
 void WATCardOffice::Courier::main() {
-  _Accept (setParent);
-  _Accept (setId);
   parent->printer.print(Printer::Kind::Courier, id, 'S');
   WATCardOffice::Job* job;
   for ( ;; ) {

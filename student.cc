@@ -14,17 +14,16 @@ id(id), maxPurchases(maxPurchases) {}
 
 
 void Student::main() {
-
   unsigned int numPurchases = mprng(1, maxPurchases);
   VendingMachine::Flavours favFlavour = 
     static_cast<VendingMachine::Flavours>(mprng(0, 3));
+  printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
 
   VendingMachine* vm = nameServer.getMachine(id);
+  printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
   WATCard::FWATCard watCard = cardOffice.create(id, 5);
   WATCard::FWATCard giftCard = groupoff.giftCard();
-  printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
-  printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
   unsigned int purchased = 0;
   for ( ;; ) {
