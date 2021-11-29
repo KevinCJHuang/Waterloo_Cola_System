@@ -1,7 +1,8 @@
 #!/bin/bash
 clear
 make soda 
-
 seed=$((1 + $RANDOM % 10))
+echo "seed is" $seed
+
 ./soda d $seed > output.txt
 ./sodaAnswer d $seed > answer.txt

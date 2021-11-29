@@ -1,8 +1,8 @@
 #include "bank.h"
 Bank::Bank( unsigned int numStudents ) : numStudents(numStudents) {
-  studentAccounts = new unsigned int [numStudents];
-  for (unsigned int i = 0; i < numStudents; i++)
-    studentAccounts[i] = 0;
+  studentAccounts = new unsigned int [numStudents] {0};
+  // for (unsigned int i = 0; i < numStudents; i++)
+  //   studentAccounts[i] = 0;
   // bench = new uCondition [numStudents];
 }
 

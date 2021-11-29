@@ -77,10 +77,10 @@ void WATCardOffice::Courier::main() {
     if (mprng (5) == 0) {
       cout << endl << "courier mprng" << endl;
       job->result.exception(new WATCardOffice::Lost()); // Lost
+      delete job->args.card;
       printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
     } else {
-        cout << endl << "courier mprng" << endl;
-
+      cout << endl << "courier mprng" << endl;
       job->result.delivery(job->args.card);            // delivered
       printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
     }

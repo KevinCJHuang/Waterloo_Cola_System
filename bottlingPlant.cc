@@ -12,7 +12,7 @@ void BottlingPlant::main() {
 
   for ( ;; ) {
   if (isShutdown) break;
-    yield(timeBetweenShipments); // yield before first shipment
+    yield(timeBetweenShipments); // yield before each shipment; order could be changed!!!!!!!!!!!!!!!!!!
 
     generatedBottles=0;
     // Perform a production run
@@ -32,7 +32,6 @@ void BottlingPlant::main() {
       } catch (uMutexFailure::RendezvousFailure &) { }// Shutdown
       break;
     }
-    // yield(timeBetweenShipments); // yield before each shipment
   }
   printer.print(Printer::Kind::BottlingPlant, 'F');
 }

@@ -6,7 +6,6 @@ extern MPRNG mprng;
 Groupoff::Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay )
 	:numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), printer(prt) {
 	giftCards = new WATCard::FWATCard[numStudents];
-	
 }
 
 void Groupoff::main() {

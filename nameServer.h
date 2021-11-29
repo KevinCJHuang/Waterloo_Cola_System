@@ -1,4 +1,4 @@
-#pragma once
+#pragma once 
 _Monitor Printer;
 _Task VendingMachine;
 _Task NameServer {
@@ -6,6 +6,7 @@ _Task NameServer {
 		VendingMachine** machineList;
 		Printer& printer;
 		unsigned int* studVMs;
+		unsigned int registeredMachines = 0;
 		void main();
 
   public:

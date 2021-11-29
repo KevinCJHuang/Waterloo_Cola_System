@@ -15,8 +15,7 @@ id(id), maxPurchases(maxPurchases) {}
 
 void Student::main() {
   unsigned int numPurchases = mprng(1, maxPurchases);
-  VendingMachine::Flavours favFlavour = 
-    static_cast<VendingMachine::Flavours>(mprng(0, 3));
+  VendingMachine::Flavours favFlavour = static_cast<VendingMachine::Flavours>(mprng(0, 3));
   cout << endl << "studnets mprng used" << endl;
 
   printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
