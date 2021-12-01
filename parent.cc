@@ -2,6 +2,9 @@
 #include "printer.h"
 #include "bank.h"
 #include "MPRNG.h"
+#ifdef DEBUG
+    using namespace std;
+#endif
 
 extern MPRNG mprng;
 void Parent::main() {

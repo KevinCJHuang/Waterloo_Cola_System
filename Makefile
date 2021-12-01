@@ -4,14 +4,14 @@
 # SENTINEL:=-1
 # BIMPL:=NOBUSY
 # BCHECK:=BARGINGCHECK
-ISDEBUG:=asdfDEBUG
+ISDEBUG:=NODEBUG
 
 CXX = u++					# compiler
 CXXFLAGS = -g -multi -Wall -Wextra -MMD -D"${ISDEBUG}"# compiler flags
 MAKEFILE_NAME = ${firstword ${MAKEFILE_LIST}}	# makefile name
 
 OBJECTS = main.o config.o printer.o parent.o bank.o truck.o nameServer.o vendingMachine.o bottlingPlant.o  WATCard.o groupOff.o student.o WATCardOffice.o # object files forming 1st executable with prefix "q2"
-EXEC = soda				# executable name
+EXEC = soda			# executable name
 DEPENDS = ${OBJECTS:.o=.d}			# substitute ".o" with ".d"
 
 #############################################################

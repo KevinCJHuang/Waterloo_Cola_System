@@ -4,6 +4,7 @@
 #include "MPRNG.h"
 extern MPRNG mprng;
 
+
 void BottlingPlant::main() {
   printer.print(Printer::Kind::BottlingPlant, 'S');
   Truck truck (printer, nameServer, *this, numVendingMachines, maxStockPerFlavour);

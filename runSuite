@@ -4,5 +4,9 @@ make soda
 seed=$((1 + $RANDOM % 10))
 echo "seed is" $seed
 
-./soda d $seed > output.txt
-./sodaAnswer d $seed > answer.txt
+# ./soda d $seed > output.txt
+# ./sodaAnswer d $seed > answer.txt
+
+./soda d 4 > output.txt
+# ./soda_DEBUG d 10 > output_DEBUG.txt
+# ./sodaAnswer d 10 > answer.txt

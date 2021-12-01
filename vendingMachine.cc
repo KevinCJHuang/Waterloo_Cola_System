@@ -4,6 +4,9 @@
 #include "nameServer.h"
 #include "printer.h"
 extern MPRNG mprng;
+#ifdef DEBUG
+    using namespace std;
+#endif
 
 VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned int id, 
 unsigned int sodaCost ): sodaCost(sodaCost), id(id), nameServer(nameServer), printer(prt) {}

@@ -1,5 +1,6 @@
 #pragma once
-
+#include <iostream>
+using namespace std;
 
 _Monitor Printer {
 	public:

@@ -21,6 +21,8 @@ void Truck::main() {
   // cout << endl << "stockCap: " <<  stockCap << endl;
 
   for ( ;; ) {
+        _Accept(~Truck) {break;} _Else // Wrong
+
     cargoRemaining = 0;
     try {
       #ifdef DEBUG
@@ -68,9 +70,6 @@ void Truck::main() {
       #endif
       if (cargoRemaining == 0 ) break; // cargo is empty
     } // for
-
-
-
   }
   printer.print(Printer::Kind::Truck, 'F');
 }

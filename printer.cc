@@ -1,6 +1,5 @@
 #include "printer.h"
-#include <iostream>
-using namespace std;
+
 // Printer's constructor
 Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines,
 	unsigned int numCouriers ) : numStudents(numStudents),
