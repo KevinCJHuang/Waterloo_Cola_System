@@ -23,9 +23,6 @@ void Groupoff::main() {
 		_Accept (~Groupoff) { break; } _Else {}
 
 		unsigned int pos = mprng(0, numStudents-1);
-	#ifdef DEBUG
-		cout << endl<<"groupoff randomed!" << endl;
-	#endif
 		if (!created[pos]) {
 			yield(groupoffDelay);
 			WATCard* newCard = new WATCard;

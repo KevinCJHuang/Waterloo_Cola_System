@@ -18,16 +18,11 @@ void Truck::main() {
   unsigned int * stock;            // stock of a vending machine
   unsigned int stockSize;
   const unsigned int stockCap = maxStockPerFlavour * numFlavours; // capacity of a vm
-  // cout << endl << "stockCap: " <<  stockCap << endl;
 
   for ( ;; ) {
-        _Accept(~Truck) {break;} _Else // Wrong
-
+    _Accept(~Truck) {break;} _Else // Wrong
     cargoRemaining = 0;
     try {
-      #ifdef DEBUG
-      cout << "truck yielding" << endl;
-      #endif
       yield(mprng(1, 10));
       plant.getShipment(cargo);
       for (i = 0; i < numFlavours; i++) {
@@ -65,9 +60,7 @@ void Truck::main() {
         printer.print(Printer::Kind::Truck, 'X');
         yield(10);
       }
-      #ifdef DEBUG
-      cout << endl << "truck flattire mprng" << endl;
-      #endif
+
       if (cargoRemaining == 0 ) break; // cargo is empty
     } // for
   }

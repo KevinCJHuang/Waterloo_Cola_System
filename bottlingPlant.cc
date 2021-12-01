@@ -17,9 +17,6 @@ void BottlingPlant::main() {
     // Perform a production run
     for (unsigned int i = 0; i < 4; i++) {
       stock[i] = mprng(0, maxShippedPerFlavour);
-    #ifdef DEBUG
-      cout << endl << "plant bottles generated - " << i << endl;
-    #endif
       generatedBottles += stock[i];
     }
 

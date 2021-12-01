@@ -3,17 +3,21 @@ Parent	Gropoff	WATOff	Names	Truck	Plant	Stud0	Stud1	Mach0	Mach1	Mach2	Cour0
 S	S	S	S								S
 			R0		S			S2
 		C0,5	R1		G7				S2
+truck yielding
 D0,1		W	R2	S						S2	t0,5
 		C1,5				S1,3
 			N0,0	P7		V0
 D1,2				d0,7			S3,8
 			N1,1	U0,13	P		V1	r
+truck yielding
 D1,2				D0,0	G8			R
 				P8
 				d1,8	P				r
 				U1,12
+truck yielding
 D1,2	D2			D1,0	G9				R
 D0,1				P9
 				d2,9	P					r
 				U2,11
+truck yielding
 	D2			D2,0

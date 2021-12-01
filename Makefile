@@ -4,7 +4,7 @@
 # SENTINEL:=-1
 # BIMPL:=NOBUSY
 # BCHECK:=BARGINGCHECK
-ISDEBUG:=NODEBUG
+ISDEBUG:=DEBUG
 
 CXX = u++					# compiler
 CXXFLAGS = -g -multi -Wall -Wextra -MMD -D"${ISDEBUG}"# compiler flags

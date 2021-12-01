@@ -40,9 +40,6 @@ void VendingMachine::buy( Flavours flavour, WATCard & card ) {
   lastFlavour = flavour;
   if (card.getBalance() < sodaCost) throw Funds();
   if (stock[flavour] <= 0) throw Stock();
-  #ifdef DEBUG
-  cout << endl << "vending machine buy free mmprng" << endl;
-  #endif
   if (!mprng(4)) {
     isFree = true;
     printer.print(Printer::Kind::Vending, id, 'A');

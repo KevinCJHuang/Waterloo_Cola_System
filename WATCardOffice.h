@@ -24,9 +24,8 @@ _Task WATCardOffice {
 				unsigned int id;
 				void main();
 			public:
-				Courier (Printer& printer, unsigned int id, WATCardOffice* parent): id(id), parent(parent), printer(printer) {}
-				// void setParent(WATCardOffice* parent);
-				// void setId(unsigned int id);
+				Courier (Printer& printer, unsigned int id, WATCardOffice* parent)
+					: id(id), parent(parent), printer(printer) {}
 		};					// communicates with bank
 
 		
@@ -34,10 +33,7 @@ _Task WATCardOffice {
 		Bank& bank;
 		Printer& printer;
 		Args curArg;
-		// unsigned int curId;
 		WATCard::FWATCard curFCard;
-		// unsigned int curAmount;
-		Courier** couriers;
 		std::queue<Job*> jobs; 
  		uCondition jobBench;
 		void main();
