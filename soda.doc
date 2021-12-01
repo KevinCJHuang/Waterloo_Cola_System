@@ -1,1 +1,46 @@
-Test doc
+Event 1:Tried to match program outputs with sample outputs but found this is not necessary later
+Detail: After the program complied, my team started to debug. We used to believe that our output
+        needs to call mprng in the same order as the sample's. We spent about 5 days on to fix 
+        our program's mprng order but did not make much progress. We were very desprate and thought 
+        that we would not be able to finish this assignment. We talked with an IA for help and found 
+        that we do not need to match any of the outputs as long as our outputs make sense :D
+Input:
+  ./soda d 10
+Output:
+Explaination: 
+################################################################################
+
+Event 2: GroupOff choose random student without repeat
+Detail:
+Input:
+Output:
+Explaination:
+################################################################################
+
+Event 3:yeild in each delivery interval 
+Detail: 
+Input:
+Output:
+Explaination
+################################################################################
+
+Event 4: Truck prints wired numbers after a few deliveries
+Detail: did not initialize and reset
+Input:
+Output:
+Explaination:
+################################################################################
+
+Event 5:
+Detail: 
+Input:
+Output:
+Explaination:
+################################################################################
+
+Event 6:
+Detail: 
+Input:
+Output:
+Explaination:
+################################################################################
