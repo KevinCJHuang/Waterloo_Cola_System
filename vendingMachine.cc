@@ -5,10 +5,10 @@
 #include "printer.h"
 extern MPRNG mprng;
 
-VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned int id, unsigned int sodaCost ): sodaCost(sodaCost), id(id), nameServer(nameServer), printer(prt) {}
+VendingMachine::VendingMachine( Printer & prt, NameServer & nameServer, unsigned int id, 
+unsigned int sodaCost ): sodaCost(sodaCost), id(id), nameServer(nameServer), printer(prt) {}
 
 void VendingMachine::main() {
-
   nameServer.VMregister(this);
   printer.print(Printer::Kind::Vending, id, 'S', sodaCost);
 
@@ -37,7 +37,9 @@ void VendingMachine::buy( Flavours flavour, WATCard & card ) {
   lastFlavour = flavour;
   if (card.getBalance() < sodaCost) throw Funds();
   if (stock[flavour] <= 0) throw Stock();
+  #ifdef DEBUG
   cout << endl << "vending machine buy free mmprng" << endl;
+  #endif
   if (!mprng(4)) {
     isFree = true;
     printer.print(Printer::Kind::Vending, id, 'A');

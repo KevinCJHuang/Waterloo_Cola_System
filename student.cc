@@ -1,6 +1,5 @@
 #include "student.h"
 #include "MPRNG.h"
-#include "vendingMachine.h"  // access: Flavours
 #include "nameServer.h"
 #include "WATCardOffice.h"
 #include "groupOff.h"
@@ -14,23 +13,27 @@ id(id), maxPurchases(maxPurchases) {}
 
 
 void Student::main() {
-  unsigned int numPurchases = mprng(1, maxPurchases);
-  VendingMachine::Flavours favFlavour = static_cast<VendingMachine::Flavours>(mprng(0, 3));
-  cout << endl << "studnets mprng used" << endl;
+  numPurchases = mprng(1, maxPurchases);
+#ifdef DEBUG
+cout << endl << "studnets" <<  id << ": mprng used - numPurchase" << endl;
+#endif
+  favFlavour = static_cast<VendingMachine::Flavours>(mprng(0, 3));
+#ifdef DEBUG
+cout << endl << "studnets" <<  id << ": mprng used - amount" << endl;
+#endif
+  watCard = cardOffice.create(id, 5);
+  giftCard = groupoff.giftCard();
+  vm = nameServer.getMachine(id);
 
   printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
 
-
-  WATCard::FWATCard watCard = cardOffice.create(id, 5);
-  WATCard::FWATCard giftCard = groupoff.giftCard();
-  VendingMachine* vm = nameServer.getMachine(id);
   printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
   unsigned int purchased = 0;
-  for ( ;; ) {
-  if (purchased == numPurchases) break;
+  for ( ;purchased < numPurchases; ) {
+  #ifdef DEBUG
     cout << "student mprng yield" << endl;
-
+  #endif
     yield(mprng(1, 10));
 
 
@@ -48,8 +51,8 @@ void Student::main() {
       }
       purchased++;
     } catch (WATCardOffice::Lost&) {
-      watCard = cardOffice.create(id, 5);
       printer.print(Printer::Kind::Student, id, 'L');
+      watCard = cardOffice.create(id, 5);
     } catch (VendingMachine::Funds&) {
       watCard = cardOffice.transfer(id, 5 + vm->cost(), watCard());
     } catch (VendingMachine::Stock&) {

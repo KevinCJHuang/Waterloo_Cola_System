@@ -83,5 +83,6 @@ int main( int argc, char * argv[] ) {
 	for (unsigned int i = 0; i < configParms.numVendingMachines; i++) {
 		delete vendingMachines[i];
 	}
+	cout << endl << "delete everything else" << endl;
 } // main
 

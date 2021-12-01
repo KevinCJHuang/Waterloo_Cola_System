@@ -4,7 +4,7 @@
 #include "nameServer.h"
 #include "MPRNG.h"
 #include "vendingMachine.h"
-
+using namespace std; // DEBUG
 extern MPRNG mprng;
 void Truck::main() {
   machineList = nameServer.getMachineList();
@@ -21,10 +21,11 @@ void Truck::main() {
   // cout << endl << "stockCap: " <<  stockCap << endl;
 
   for ( ;; ) {
-    _Accept(~Truck) {break;} _Else
     cargoRemaining = 0;
     try {
+      #ifdef DEBUG
       cout << "truck yielding" << endl;
+      #endif
       yield(mprng(1, 10));
       plant.getShipment(cargo);
       for (i = 0; i < numFlavours; i++) {
@@ -62,7 +63,9 @@ void Truck::main() {
         printer.print(Printer::Kind::Truck, 'X');
         yield(10);
       }
+      #ifdef DEBUG
       cout << endl << "truck flattire mprng" << endl;
+      #endif
       if (cargoRemaining == 0 ) break; // cargo is empty
     } // for
 

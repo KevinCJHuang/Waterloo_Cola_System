@@ -1,6 +1,7 @@
 #pragma once
 #include "WATCard.h"
-
+#include <queue>
+#include <uSemaphore.h>
 _Monitor Bank;
 _Monitor Printer;
 _Task Courier;
@@ -28,7 +29,7 @@ _Task WATCardOffice {
 				// void setId(unsigned int id);
 		};					// communicates with bank
 
-
+		
 		unsigned int numCouriers;
 		Bank& bank;
 		Printer& printer;
@@ -36,9 +37,9 @@ _Task WATCardOffice {
 		// unsigned int curId;
 		WATCard::FWATCard curFCard;
 		// unsigned int curAmount;
-		Job* curJob;
 		Courier** couriers;
-
+		std::queue<Job*> jobs; 
+ 		uCondition jobBench;
 		void main();
   public:
 		_Event Lost {};							// lost WATCard

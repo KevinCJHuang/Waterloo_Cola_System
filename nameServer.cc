@@ -16,8 +16,8 @@ NameServer::~NameServer() {
 
 void NameServer::VMregister( VendingMachine * vendingmachine ) {
   // curId = vendingmachine->getId();
-  machineList[registeredMachines++] = vendingmachine;
   printer.print(Printer::Kind::NameServer, 'R', vendingmachine->getId());
+  machineList[registeredMachines++] = vendingmachine;
 }
 
 VendingMachine * NameServer::getMachine( unsigned int id ) {
@@ -32,7 +32,6 @@ VendingMachine ** NameServer::getMachineList() {
 void NameServer::main() {
   
   printer.print(Printer::Kind::NameServer, 'S');
-  // VendingMachine* tempMachineList [numVendingMachines];
   machineList = new VendingMachine* [numVendingMachines];
 
   // unsigned int tempStudVMs [numStudents]; // fixed

@@ -1,6 +1,5 @@
 #pragma once
-#include <iostream>
-using namespace std;
+
 
 _Monitor Printer {
 	public:
@@ -31,8 +30,9 @@ _Monitor Printer {
 		PState* buffer;
 		void insertState(PState pState);
   public:
-		Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers );		void print( Kind kind, char state );
+		Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers );		
 		~Printer();
+		void print( Kind kind, char state );
 		void print( Kind kind, char state, unsigned int value1 );
 		void print( Kind kind, char state, unsigned int value1, unsigned int value2 );
 		void print( Kind kind, unsigned int lid, char state );

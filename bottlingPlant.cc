@@ -11,35 +11,34 @@ void BottlingPlant::main() {
   unsigned int generatedBottles;
 
   for ( ;; ) {
-  if (isShutdown) break;
     yield(timeBetweenShipments); // yield before each shipment; order could be changed!!!!!!!!!!!!!!!!!!
-
     generatedBottles=0;
     // Perform a production run
     for (unsigned int i = 0; i < 4; i++) {
       stock[i] = mprng(0, maxShippedPerFlavour);
+    #ifdef DEBUG
+      cout << endl << "plant bottles generated - " << i << endl;
+    #endif
       generatedBottles += stock[i];
     }
-    cout << endl << "plant bottles generated" << endl;
 
     printer.print(Printer::Kind::BottlingPlant, 'G', generatedBottles);
 
-    _Accept (getShipment) {}
-    or _Accept (~BottlingPlant) {
+    _Accept (~BottlingPlant) {
       isShutdown = true;
-      try {
-        _Accept (getShipment)
-      } catch (uMutexFailure::RendezvousFailure &) { }// Shutdown
+      _Accept (getShipment)
       break;
+    }
+    or _Accept (getShipment) {
+      printer.print(Printer::Kind::BottlingPlant, 'P');
     }
   }
   printer.print(Printer::Kind::BottlingPlant, 'F');
 }
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {
-  if (isShutdown) throw Shutdown{};
-  printer.print(Printer::Kind::BottlingPlant, 'P');
-  for (unsigned int i = 0; i < 4; i++) {
+  if (isShutdown) _Resume Shutdown{} _At uThisTask();
+  for (unsigned int i = 0; i < 4; i++) { 
     cargo[i] = stock[i];
   }
 }

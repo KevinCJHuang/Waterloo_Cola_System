@@ -10,10 +10,12 @@ void Parent::main() {
     _Accept (~Parent) { break; } _Else {}
     unsigned amount = mprng(1,3);
     unsigned studentId = mprng (0, numStudents - 1);
-    cout << endl << "parent 2 mprngs done" << endl;
+  #ifdef DEBUG
+    cout << endl << "parent 2 mprngs" << studentId << ", " << amount << endl;
+  #endif
     yield(parentalDelay); // debug: checked
-    bank.deposit(studentId, amount);
     printer.print(Printer::Kind::Parent, 'D', studentId, amount);
+    bank.deposit(studentId, amount);
   }
   printer.print(Printer::Kind::Parent, 'F');
 }

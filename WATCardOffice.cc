@@ -18,7 +18,6 @@ WATCardOffice::~WATCardOffice() {
 WATCard::FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount ) {
   curArg = Args {sid, amount};
   curFCard = WATCard::FWATCard();
-  printer.print(Printer::Kind::WATCardOffice, 'C', sid, amount);
   return curFCard;
 }
 WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard * card ) {
@@ -29,9 +28,13 @@ WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount
 }
 
 WATCardOffice::Job * WATCardOffice::requestWork() {
-  if (!(curJob->args.end)) printer.print(Printer::Kind::WATCardOffice, 'W');
-  return curJob;
+  if (jobs.size() == 0) jobBench.wait();
+  Job* rv = jobs.front();
+  if (!(rv->args.end)) printer.print(Printer::Kind::WATCardOffice, 'W');
+  jobs.pop();
+  return rv;
 }
+
 
 void WATCardOffice::main() {
   printer.print(Printer::Kind::WATCardOffice, 'S');
@@ -39,32 +42,46 @@ void WATCardOffice::main() {
   // cout << "watcardOff: courisers created " << endl;
 
   for ( ;; ) {
-    _Accept (create) {
+    _Accept (requestWork) {}
+    or _Accept (create) {
       curArg.card = new WATCard(); // Create new card for courier
-      curJob = new Job (curArg);   // Create new job
-      curJob->result = curFCard;    // Set new job's FWATCard result
-      _Accept(requestWork);        // Let courier do the work
+      Job* newJob = new Job (curArg);
+      newJob->result = curFCard;
+      jobs.push(newJob);
+      printer.print(Printer::Kind::WATCardOffice, 'C', curArg.sid, curArg.amount);
+      jobBench.signalBlock();
     } or _Accept (transfer) {
-      curJob = new Job (curArg);   // Create new job
-      curJob->result = curFCard;    // Set new job's FWATCard result
-      _Accept(requestWork);        // Let courier do the work
+      Job* newJob = new Job (curArg);
+      newJob->result = curFCard;
+      jobs.push(newJob);
+      printer.print(Printer::Kind::WATCardOffice, 'C', curArg.sid, curArg.amount);
+      jobBench.signalBlock();
     } or _Accept (~WATCardOffice) {
-      Job curJob (Args{0,0,nullptr, true});   // Create new job
+      // clear existing work
+      Job newJob (Args{0,0,nullptr, true});   // Create new job
       for (unsigned int i = 0; i < numCouriers; i++) {
-        _Accept(requestWork);        // Let courier do the work
+        jobs.push(&newJob);
       }
-      for (int unsigned i = 0; i < numCouriers; i++) {
+      unsigned int unfinishedCouriers = numCouriers;
+      while (!jobBench.empty()) {
+        jobBench.signalBlock();
+        unfinishedCouriers--;
+      }
+      for ( ;; ) {
+      if (unfinishedCouriers == 0) break;
+        _Accept (requestWork);
+        unfinishedCouriers--;
+      }
+      for (unsigned int i = 0; i < numCouriers; i++) {
         delete couriers[i];
       }
       break;
     }
   }
-
   printer.print(Printer::Kind::WATCardOffice, 'F');
 }
 
 void WATCardOffice::Courier::main() {
-  // cout << "courier printing: " << endl;
   printer.print(Printer::Kind::Courier, id, 'S');
   WATCardOffice::Job* job;
   for ( ;; ) {
@@ -75,12 +92,16 @@ void WATCardOffice::Courier::main() {
     job->args.card->deposit(job->args.amount);
 
     if (mprng (5) == 0) {
+      #ifdef DEBUG
       cout << endl << "courier mprng" << endl;
+      #endif
       job->result.exception(new WATCardOffice::Lost()); // Lost
       delete job->args.card;
       printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
     } else {
+      #ifdef DEBUG
       cout << endl << "courier mprng" << endl;
+      #endif
       job->result.delivery(job->args.card);            // delivered
       printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
     }
