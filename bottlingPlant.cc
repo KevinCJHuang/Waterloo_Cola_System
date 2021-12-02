@@ -16,7 +16,7 @@ void BottlingPlant::main() {
     generatedBottles=0;
     // Perform a production run
     for (unsigned int i = 0; i < 4; i++) {
-      stock[i] = mprng(0, maxShippedPerFlavour);
+      stock[i] = mprng(maxShippedPerFlavour);
       generatedBottles += stock[i];
     }
 

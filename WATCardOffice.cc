@@ -5,10 +5,7 @@
 
 extern MPRNG mprng;
 WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): printer(prt), bank(bank), numCouriers(numCouriers) {
-  couriers = new Courier* [numCouriers];
-  for (unsigned int i = 0; i < numCouriers; i++) {
-    couriers[i] = new Courier (printer, i, this);
-  }
+
 };
 
 WATCardOffice::~WATCardOffice() {
@@ -38,7 +35,9 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 void WATCardOffice::main() {
   printer.print(Printer::Kind::WATCardOffice, 'S');
   Courier* couriers [numCouriers];
-
+  for (unsigned int i = 0; i < numCouriers; i++) {
+    couriers[i] = new Courier (printer, i, this);
+  }
   for ( ;; ) {
     _Accept (requestWork) {}
     or _Accept (create) {

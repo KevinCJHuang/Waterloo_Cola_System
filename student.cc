@@ -16,10 +16,9 @@ id(id) {
 
 
 void Student::main() {
-  VendingMachine::Flavour favFlavour
+  VendingMachine::Flavours favFlavour
     = static_cast<VendingMachine::Flavours>(mprng(0, 3)); // Selecting favourite flavour
   printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
-
   WATCard::FWATCard watCard = cardOffice.create(id, 5);   // Create Watcard
   WATCard::FWATCard giftCard = groupoff.giftCard();       // Create gift card
 
@@ -35,6 +34,7 @@ void Student::main() {
         isGiftCardPurchased = true;
         vm->buy( favFlavour, *giftCard );
         printer.print(Printer::Kind::Student, id, 'G', favFlavour, (*giftCard).getBalance());
+        delete giftCard;
         giftCard.reset();       // Discard gift card
       }
       or _Select (watCard) {    // Wait for WATCard
@@ -48,15 +48,20 @@ void Student::main() {
     } catch (VendingMachine::Funds&) {  // WATCard balance is insufficient
       watCard = cardOffice.transfer(id, 5 + vm->cost(), watCard());
     } catch (VendingMachine::Stock&) {
+
       vm = nameServer.getMachine(id);
       printer.print(Printer::Kind::Student, id, 'V', vm->getId());
     } catch (VendingMachine::Free&) {
+
       isGiftCardPurchased
         ? printer.print(Printer::Kind::Student, id, 'a', favFlavour, (*giftCard).getBalance())
         : printer.print(Printer::Kind::Student, id, 'A', favFlavour, (*watCard).getBalance());
       yield(4);
+      isGiftCardPurchased = false;
     } // try
   }
+  delete watCard();
+  if (giftCard.available()) delete giftCard();
   printer.print(Printer::Kind::Student, id, 'F');
 }
 

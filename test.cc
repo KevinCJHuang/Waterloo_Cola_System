@@ -1,5 +1,13 @@
+#include <uFuture.h>
+
+
 int main () {
-    int * x;
-    int y[5] {0};
-    x = int[5];
+    Future_ISM<int *> fint;
+    int x;
+    int* y = new int(5);
+    fint.delivery(y);
+    delete y;
+    fint.reset();
+    malloc_stats();
+
 }

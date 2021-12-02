@@ -20,7 +20,7 @@ void Truck::main() {
   const unsigned int stockCap = maxStockPerFlavour * numFlavours; // capacity of a vm
 
   for ( ;; ) {
-    _Accept(~Truck) {break;} _Else // Wrong
+    // _Accept(~Truck) {break;} _Else
     cargoRemaining = 0;
     try {
       yield(mprng(1, 10));
@@ -30,6 +30,7 @@ void Truck::main() {
       }
       printer.print(Printer::Kind::Truck, 'P', cargoRemaining);
     } catch (BottlingPlant::Shutdown &) { // Shutdown
+    cout << "truck shut down" << endl;
       break;
     }
 

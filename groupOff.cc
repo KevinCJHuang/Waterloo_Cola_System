@@ -5,32 +5,25 @@
 extern MPRNG mprng;
 Groupoff::Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay )
 	:numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), printer(prt) {
-	giftCards = new WATCard::FWATCard[numStudents];
+	giftCards = new WATCard::FWATCard [numStudents];
 }
 
 void Groupoff::main() {
 	printer.print(Printer::Kind::Groupoff, 'S');
 	unsigned int i;
-	unsigned int studentsDone = 0;
-	for ( i = 0; i < numStudents; i++) {
-		_Accept (giftCard);
-		studentsDone++;
-	}
-
-	bool created [numStudents] {false};
-	unsigned int createdGiftCard = 0;
-	for ( ;; ) {
-		_Accept (~Groupoff) { break; } _Else {}
-
-		unsigned int pos = mprng(0, numStudents-1);
-		if (!created[pos]) {
+	for ( i = 0; i < numStudents; i++) _Accept (giftCard);
+	
+	for ( i = numStudents - 1; ; i--) {
+		_Accept (~Groupoff) { break; }
+		_Else {
 			yield(groupoffDelay);
+			unsigned int pos = mprng(i);
 			WATCard* newCard = new WATCard;
 			newCard->deposit(sodaCost);
-			giftCards[pos].delivery(newCard);
 			printer.print(Printer::Kind::Groupoff, 'D', sodaCost);
-			created[pos] = true;
-			if (++createdGiftCard == numStudents) break;
+			swap (giftCards[pos], giftCards[i]);
+			giftCards[i].delivery(newCard);
+		if (i == 0) break;
 		}
 	}
 
@@ -38,9 +31,11 @@ void Groupoff::main() {
 }
 
 WATCard::FWATCard Groupoff::giftCard() {
-	return giftCards[studentsDone];
+	return giftCards[studentsDone++];
 }
 
 Groupoff::~Groupoff() {
 	delete [] giftCards;
 }
+
+
