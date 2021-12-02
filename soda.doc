@@ -37,8 +37,9 @@ Output:
 Explaination: After correcting the mistakes, Truck always prints correct positive numbers. 
 ################################################################################
 
-Event 5:
-Detail: 
+Event 5: All students received the same gift card
+Detail: We accidentally created two counter variables with the same name, one in .h file and the other in Groupoff::main(),
+        
 Input:
 Output:
 Explaination:
