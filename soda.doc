@@ -1,1 +1,53 @@
-Test doc
+Event 1:Group members tried to match program outputs with sample outputs
+Detail: After the program complied, my team started to debug. We used to believe that our output
+        needs to call mprng in the same order as the sample's. We spent about 5 days on to fix 
+        our program's mprng order but did not make much progress. We were very desprate and thought 
+        that we would not be able to finish this assignment. We talked with an IA for help and found 
+        that we do not need to match any of the outputs as long as our outputs make sense :D
+Input:
+  ./soda d 10
+Output:
+Explaination: 
+################################################################################
+
+Event 2: GroupOff choose random student without repeat
+Detail:
+Input:
+Output:
+Explaination:
+################################################################################
+
+Event 3: Decide where to yield in BottlingPlant
+Detail: We were not sure whether the BottlingPlant needs to yield beofre the first production and attended 
+        an office hour to clarify that. The answer is that BottlingPlant needs to yield before each production.
+Input:
+Output:
+Explaination: Outputs Gb and P genereated by Plant are always sepreate in a few lines. That means BottlingPlant 
+              does not finish generating bottles righ after it prints Gb. This is realized by letting BottlingPlant 
+              to yeild before production every loop and this matchs the requirement.
+################################################################################
+
+Event 4: Truck prints wired numbers after a few deliveries
+Detail: We found that Truck always prints very large number after a few deliveries in Uv,b. After examine our codes, 
+        we found two issues related with this problem. The first one is that we did not initialize a variable. The 
+        second one is that we forgot to reset stocks and that causes another unsigned int variable became negative. 
+        Since it is an unsigned int, it underflows.
+Input:
+Output:
+Explaination: After correcting the mistakes, Truck always prints correct positive numbers. 
+################################################################################
+
+Event 5: All students received the same gift card
+Detail: We accidentally created two counter variables with the same name, one in .h file and the other in Groupoff::main(),
+        
+Input:
+Output:
+Explaination:
+################################################################################
+
+Event 6:
+Detail: 
+Input:
+Output:
+Explaination:
+################################################################################
