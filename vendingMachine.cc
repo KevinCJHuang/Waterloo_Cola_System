@@ -16,38 +16,47 @@ void VendingMachine::main() {
   printer.print(Printer::Kind::Vending, id, 'S', sodaCost);
 
   for ( ;; ) {
-    try {
-      _Accept (~VendingMachine) {break;}
-      or _Accept (buy) {
-        stock[lastFlavour]--;
-      } or _Accept (inventory) {
-        printer.print(Printer::Kind::Vending, id, 'r');
-        _Accept (restocked);
-        printer.print(Printer::Kind::Vending, id, 'R');
+    _Accept (~VendingMachine) {break;}
+    or _Accept (buy) {
+      if (curCard->getBalance() < sodaCost) {
+        state = FUNDS;
+      } else if (stock[curFlavour] <= 0) {
+        state = STOCK;
+      } else if (!mprng(4)) {
+        state = FREE;
+        stock[curFlavour]--;
+        printer.print(Printer::Kind::Vending, id, 'A');
+      } else {
+        state = BUY;
+        stock[curFlavour]--;
+        printer.print(Printer::Kind::Vending, id, 'B', curFlavour, stock[curFlavour]);
+        curCard->withdraw(sodaCost);
       }
-    } catch (uMutexFailure::RendezvousFailure &) {
-      if (isFree) { // Free drink; needs to decrement stock
-        stock[lastFlavour]--;
-        isFree = false;
-      }
-    } // try
+      bench.signalBlock();
+    } or _Accept (inventory) {
+      printer.print(Printer::Kind::Vending, id, 'r');
+      _Accept (restocked);
+      printer.print(Printer::Kind::Vending, id, 'R');
+    }
   } // for
   printer.print(Printer::Kind::Vending, id, 'F');
 }
 
 
 void VendingMachine::buy( Flavours flavour, WATCard & card ) {
-  lastFlavour = flavour;
-  if (card.getBalance() < sodaCost) throw Funds();
-  if (stock[flavour] <= 0) throw Stock();
-  if (!mprng(4)) {
-    isFree = true;
-    printer.print(Printer::Kind::Vending, id, 'A');
-    throw Free();
-  } else {
-    printer.print(Printer::Kind::Vending, id, 'B', flavour, stock[flavour]);
+  curFlavour = flavour;
+  curCard = &card;
+  bench.wait();
+  switch (state) {
+    case FUNDS:
+      _Throw Funds{};
+      break;
+    case STOCK:
+      _Throw Stock{};
+      break;
+    case FREE:
+      _Throw Free{};
   }
-  card.withdraw(sodaCost);
 }
 
 unsigned int * VendingMachine::inventory() { return stock; }
@@ -55,4 +64,3 @@ void VendingMachine::restocked() {
 }
 _Nomutex unsigned int VendingMachine::cost() const { return sodaCost; }
 _Nomutex unsigned int VendingMachine::getId() const { return id; }
-

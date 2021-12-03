@@ -9,8 +9,7 @@ _Task Student {
 		NameServer& nameServer;
 		WATCardOffice& cardOffice;
 		Groupoff& groupoff;
-		unsigned int id, numPurchases;
-
+		unsigned int id, numPurchases;	// student's id & number of purchases 
 		void main();
   public:
 		Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice,

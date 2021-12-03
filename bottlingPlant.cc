@@ -32,21 +32,22 @@ void BottlingPlant::main() {
 
     _Accept (~BottlingPlant) { // If dtor is called, shutdown truck & self
       isShutdown = true;       // flag variable for getShipment()
-      _Accept (getShipment)    // raise Shutdown{} on truck
+      try {
+        _Accept (getShipment)    // raise shutdown{} on truck
+      } catch (uMutexFailure::RendezvousFailure &) {} // caused by shutdown{}; ignore
       break;
-    }
-    or _Accept (getShipment) {
+    } or _Accept (getShipment) {
       printer.print(Printer::Kind::BottlingPlant, 'P');
-    }
+    } // _Accept
   }
   printer.print(Printer::Kind::BottlingPlant, 'F');
 }
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {
-  if (isShutdown) {
-    _Resume Shutdown{} _At uThisTask();   // Terminate the truck
-  }
-  for (unsigned int i = 0; i < 4; i++) {  // fill truck's carge
+  if (isShutdown) _Throw Shutdown{}; // check for shutdown
+
+  // fill truck's cargo
+  for (unsigned int i = 0; i < 4; i++) {
     cargo[i] = stock[i];
-  }
+  } // for
 }

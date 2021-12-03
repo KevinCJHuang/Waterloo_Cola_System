@@ -6,11 +6,15 @@ _Monitor Bank;
 _Monitor Printer;
 _Task Courier;
 _Task WATCardOffice {
+		// given by ctor
+		unsigned int numCouriers;
+		Bank& bank;
+		Printer& printer;
+
 		struct Args {
 			unsigned int sid;
 			unsigned int amount;
 			WATCard* card = nullptr;
-			bool end = false;
 		};
 
 		struct Job { // marshalled arguments and return future
@@ -18,6 +22,7 @@ _Task WATCardOffice {
 			WATCard::FWATCard result;			// return future
 			Job( Args args ) : args( args ) {}
 		};
+
 		_Task Courier {
 				Printer& printer;
 				WATCardOffice* parent;
@@ -28,14 +33,13 @@ _Task WATCardOffice {
 					: id(id), parent(parent), printer(printer) {}
 		};					// communicates with bank
 
-		_Event Terminate {};					// shutdown plant
-		unsigned int numCouriers;
-		Bank& bank;
-		Printer& printer;
-		Args curArg;
-		WATCard::FWATCard curFCard;
-		std::queue<Job*> jobs; 
- 		uCondition jobBench;
+		bool isTerminate = false;			// flag for terminating couriers
+		_Event Terminate {};					// raised at each courier for termination
+		Args curArg;									// current arg from transfer/create calls
+		WATCard::FWATCard curFCard;		// current FWATCard from transfer/create calls
+		std::queue<Job*> jobs; 				// queue of jobs to be done by courier
+ 		uCondition jobBench;					// when there's no job, couriers sit on this bench
+		void createJob(char state);		// create & push a new job; state = 'T' or 'C'
 		void main();
   public:
 		_Event Lost {};							// lost WATCard

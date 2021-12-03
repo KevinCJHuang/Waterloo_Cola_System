@@ -9,8 +9,11 @@ _Task VendingMachine {
 		unsigned int id, sodaCost;
 		NameServer& nameServer;
 		Printer& printer;
-		Flavours lastFlavour; // Flavour of last purchase
-		bool isFree = false;  // Last purchase is free
+		Flavours curFlavour;  // Flavour of last purchase
+		enum PurchaseState { FREE, STOCK, FUNDS, BUY };
+		uCondition bench;	  // for VendingMachine::buy()
+		WATCard* curCard;	  // for VendingMachine::buy()
+		PurchaseState state;  // for VendingMachine::buy()
 		unsigned int stock [4] {0,0,0,0};
  		void main();
 

@@ -23,3 +23,65 @@ Stack back trace for: ./soda
 (1) ./soda UPP::uBaseFuture<WATCard*>::reset()+0xa1 [0x55f66373541d]
 (2) ./soda Future_ISM<WATCard*>::reset()+0x1f [0x55f66373519f]
 ./runSuite: line 10: 46717 Aborted                 ./soda d 4 > output.txt
+
+# test doc notes
+- how to find special cases?
+=> use longer tests (e.g., maxPurchases = 80)
+## student.cc
+### prioritize gift card
+- gift card first
+G1,0
+B1,3
+
+- watcard first
+B1,3
+G1,0
+
+- watcard first, with no stock
+V1
+G1,0
+
+### free (advertisement)
+- basic advertisement
+B1,3
+A1,3
+B1,1
+
+- advertisement after transfer
+B1,1
+A1,8
+B1,6
+
+- consecutive free
+B1,1
+A1,8
+A1,8
+B1,6
+
+### lost
+- lost on create
+G1,0
+L
+B1,3
+
+- lost on transfer
+G1,0
+B1,3
+B1,1
+L
+B1,3
+
+- lost on create, followed by free (advertisement)
+G1,0
+L
+A1,5
+B1,3
+
+- lost on transfer, followed by free (advertisement)
+
+
+- lost twice in a row (or lost on create)
+B1,0
+L
+L
+B1,3

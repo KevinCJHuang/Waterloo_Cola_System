@@ -9,7 +9,7 @@ do
     ./soda d $seed > output.txt
 done
 
-# ./sodaAnswer d $seed > answer.txt
+./sodaAnswer d $seed > answer.txt
 
 # ./soda d 5 > output.txt
 # ./soda_DEBUG d 10 > output_DEBUG.txt

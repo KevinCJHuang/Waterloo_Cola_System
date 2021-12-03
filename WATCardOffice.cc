@@ -17,62 +17,64 @@ WATCard::FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
 WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard * card ) {
   curArg = Args {sid, amount, card};
   curFCard = WATCard::FWATCard();
-  printer.print(Printer::Kind::WATCardOffice, 'T', sid, amount);
   return curFCard;
 }
 
 WATCardOffice::Job * WATCardOffice::requestWork() {
-  if (jobs.size() == 0) jobBench.wait();
-  Job* rv = jobs.front();
-  jobs.pop();
-  if (!(rv->args.end)) printer.print(Printer::Kind::WATCardOffice, 'W');
+  if (jobs.size() == 0) jobBench.wait(); // wait if there's no job to do
+  if (isTerminate) _Throw Terminate{};   // terminate courier
+  Job* rv = jobs.front();                // take first job in the job queue
+  jobs.pop();                            // pop it from the job queue
+  printer.print(Printer::Kind::WATCardOffice, 'W');
   return rv;
 }
 
+void WATCardOffice::createJob(char state) {
+  Job* newJob = new Job (curArg); // create new job using curArg
+  newJob->result = curFCard;      // and curFCard
+  jobs.push(newJob);              // then push it into job queue
+  printer.print(Printer::Kind::WATCardOffice, state, curArg.sid, curArg.amount);
+  jobBench.signalBlock();         // if there's any worker on the bench, wake them up
+}
 
 void WATCardOffice::main() {
   printer.print(Printer::Kind::WATCardOffice, 'S');
+
+  // create couriers
   Courier* couriers [numCouriers];
   for (unsigned int i = 0; i < numCouriers; i++) {
     couriers[i] = new Courier (printer, i, this);
   }
   for ( ;; ) {
-    _Accept (requestWork) {}
-    or _Accept (create) {
-      curArg.card = new WATCard(); // Create new card for courier
-      Job* newJob = new Job (curArg);
-      newJob->result = curFCard;
-      jobs.push(newJob);
-      printer.print(Printer::Kind::WATCardOffice, 'C', curArg.sid, curArg.amount);
-      jobBench.signalBlock();
+    _Accept (requestWork) {
+    } or _Accept (create) {
+      curArg.card = new WATCard(); // create new card for courier
+      createJob('C');              // create new job & push to job queue
     } or _Accept (transfer) {
-      Job* newJob = new Job (curArg);
-      newJob->result = curFCard;
-      jobs.push(newJob);
-      printer.print(Printer::Kind::WATCardOffice, 'C', curArg.sid, curArg.amount);
-      jobBench.signalBlock();
+      createJob('T');              // create new job & push to job queue
     } or _Accept (~WATCardOffice) {
-      // clear existing work
-      Job newJob (Args{0,0,nullptr, true});   // Create new job
-      for (unsigned int i = 0; i < numCouriers; i++) {
-        jobs.push(&newJob);
-      }
+      isTerminate = true;
       unsigned int unfinishedCouriers = numCouriers;
+
+      // Wake up & terminate couriers waiting on the bench
       while (!jobBench.empty()) {
         jobBench.signalBlock();
         unfinishedCouriers--;
       }
-      for ( ;; ) {
-      if (unfinishedCouriers == 0) break;
+
+      // accept remaining couriers, and terminate them
+      for (unsigned int i = 0; i < unfinishedCouriers; i++) {
         _Accept (requestWork);
-        unfinishedCouriers--;
+        jobBench.signalBlock();
       }
+
+      // memory manage
       for (unsigned int i = 0; i < numCouriers; i++) {
         delete couriers[i];
       }
       break;
-    }
-  }
+    } // _Accept
+  } // for
   printer.print(Printer::Kind::WATCardOffice, 'F');
 }
 
@@ -80,17 +82,20 @@ void WATCardOffice::Courier::main() {
   printer.print(Printer::Kind::Courier, id, 'S');
   WATCardOffice::Job* job;
   for ( ;; ) {
-    job = parent->requestWork();
-    if (job->args.end) break;
+    try {
+      job = parent->requestWork();  // request work
+    } catch ( WATCardOffice::Terminate& ) { break; } // if raised Terminate(), break
+
     printer.print(Printer::Kind::Courier, id, 't', job->args.sid, job->args.amount);
     parent->bank.withdraw( job->args.sid, job->args.amount );
     job->args.card->deposit(job->args.amount);
 
     if (mprng (5) == 0) {
       job->result.exception(new WATCardOffice::Lost()); // Lost
-      delete job->args.card;
+      delete job->args.card; // delete card
       printer.print(Printer::Kind::Courier, id, 'L', job->args.sid);
     } else {
+      // card's ownership/memory will be managed by student
       job->result.delivery(job->args.card);            // delivered
       printer.print(Printer::Kind::Courier, id, 'T', job->args.sid, job->args.amount);
     }

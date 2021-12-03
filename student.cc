@@ -8,60 +8,63 @@
 
 extern MPRNG mprng;
 
-Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice, Groupoff & groupoff, unsigned int id, unsigned int maxPurchases )
-: printer(prt), nameServer(nameServer), cardOffice(cardOffice), groupoff(groupoff),
-id(id) {
-  numPurchases = mprng(1, maxPurchases);
+Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice,
+  Groupoff & groupoff, unsigned int id, unsigned int maxPurchases ): printer(prt),
+  nameServer(nameServer), cardOffice(cardOffice), groupoff(groupoff), id(id) {
+    numPurchases = mprng(1, maxPurchases);
 }
 
-
 void Student::main() {
+  // choose favouriate flavour
   VendingMachine::Flavours favFlavour
-    = static_cast<VendingMachine::Flavours>(mprng(0, 3)); // Selecting favourite flavour
+    = static_cast<VendingMachine::Flavours>(mprng(3));
   printer.print(Printer::Kind::Student, id, 'S', favFlavour, numPurchases);
-  WATCard::FWATCard watCard = cardOffice.create(id, 5);   // Create Watcard
-  WATCard::FWATCard giftCard = groupoff.giftCard();       // Create gift card
 
-  VendingMachine* vm = nameServer.getMachine(id);         // Obtain location of vm
+  // create gift card & watcard
+  WATCard::FWATCard watCard = cardOffice.create(id, 5);
+  WATCard::FWATCard giftCard = groupoff.giftCard();
+
+  // obtain location of vm to visit
+  VendingMachine* vm = nameServer.getMachine(id);
   printer.print(Printer::Kind::Student, id, 'V', vm->getId());
 
-  unsigned int purchased = 0;   // Purchased drink so far
-  for ( ; purchased < numPurchases; ) {
-    yield(mprng(1, 10));
-    bool isGiftCardPurchased = false;
+  // start purchases
+  bool giftCardPurchase;         // track card used for VendingMachine::Free print msg
+  yield(mprng(1, 10));           // yiled before first purchase
+  for (unsigned int purchased = 0; purchased < numPurchases; ) {
     try {
-      _Select (giftCard) {      // Wait for gift card
-        isGiftCardPurchased = true;
-        vm->buy( favFlavour, *giftCard );
+      _Select (giftCard) {       // Wait for gift card
+        giftCardPurchase = true;
+        vm->buy( favFlavour, *giftCard ); // make the purchase
         printer.print(Printer::Kind::Student, id, 'G', favFlavour, (*giftCard).getBalance());
         delete giftCard;
-        giftCard.reset();       // Discard gift card
-      }
-      or _Select (watCard) {    // Wait for WATCard
-        vm->buy( favFlavour, *watCard );
+        giftCard.reset();        // Discard gift card
+      } or _Select (watCard) {     // Wait for WATCard
+        giftCardPurchase = false;
+        vm->buy( favFlavour, *watCard ); // make the purchase
         printer.print(Printer::Kind::Student, id, 'B', favFlavour, (*watCard).getBalance());
       }
       purchased++;
-    } catch (WATCardOffice::Lost&) {    // WATCard is lost
+    } catch (WATCardOffice::Lost&) {
       printer.print(Printer::Kind::Student, id, 'L');
-      watCard = cardOffice.create(id, 5);
-    } catch (VendingMachine::Funds&) {  // WATCard balance is insufficient
-      watCard = cardOffice.transfer(id, 5 + vm->cost(), watCard());
+      watCard = cardOffice.create(id, 5);                           // create a new card
+      continue; // to skip yield; Lost doesn't need to yield
+    } catch (VendingMachine::Funds&) {
+      watCard = cardOffice.transfer(id, 5 + vm->cost(), watCard()); // send courier to get more money
     } catch (VendingMachine::Stock&) {
-
       vm = nameServer.getMachine(id);
       printer.print(Printer::Kind::Student, id, 'V', vm->getId());
     } catch (VendingMachine::Free&) {
-
-      isGiftCardPurchased
+      giftCardPurchase
         ? printer.print(Printer::Kind::Student, id, 'a', favFlavour, (*giftCard).getBalance())
         : printer.print(Printer::Kind::Student, id, 'A', favFlavour, (*watCard).getBalance());
       yield(4);
-      isGiftCardPurchased = false;
+      continue; // to skip yield; Free doesn't need to yield
     } // try
-  }
-  delete watCard();
-  if (giftCard.available()) delete giftCard();
+    yield(mprng(1, 10)); // yiled before next purchase
+  } // for
+  delete watCard(); // delete watCard, no matter it's used or not
+  if (giftCard.available()) delete giftCard(); // delete gift card if it is not used
   printer.print(Printer::Kind::Student, id, 'F');
 }
 
