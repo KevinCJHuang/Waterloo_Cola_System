@@ -8,9 +8,7 @@ WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCourie
 
 };
 
-WATCardOffice::~WATCardOffice() {
-
-}
+WATCardOffice::~WATCardOffice() { }
 WATCard::FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount ) {
   curArg = Args {sid, amount};
   curFCard = WATCard::FWATCard();

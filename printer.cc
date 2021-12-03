@@ -19,12 +19,15 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines,
 
 	// Initialize buffer
 	buffer = new PState[6 + numStudents + numVendingMachines + numCouriers];
-};  // print Visitor names
+};
 
 // Printer's dtor
 Printer::~Printer() {
+	// flush and print whatever's left in the buffer
   for (unsigned int i = 0; i < 6 + numStudents + numVendingMachines; i++) {
     if (buffer[i].isActive) {
+			// if current state is not printed yet, insert an arbitrary state into
+			// the buffer to flush the last line of PStates
 			Kind kind = buffer[i].kind;
 			int lid = buffer[i].lid;
 			lid == -1 ? insertState(PState(kind, 'F'))
@@ -36,43 +39,33 @@ Printer::~Printer() {
   delete []buffer;
 }
 
+// Printer::print inserts a corresponding PState into the buffer.
+// Printer::insertState will manage when to flush the buffer and print
 void Printer::print( Kind kind, char state ) {
-	// cout << "printer: " << kind << ", " << state << endl;
 	insertState(PState(kind, state));
 }
 void Printer::print( Kind kind, char state, unsigned int value1 ) {
-	// cout << "printer: " << kind << ", " << state << endl;
-
 	insertState(PState(kind, state, value1));
 }
 void Printer::print( Kind kind, char state, unsigned int value1, unsigned int value2 ) {
-	// cout << "printer: " << kind << ", " << state << endl;
-
 	insertState(PState(kind, state, value1, value2));
 }
 void Printer::print( Kind kind, unsigned int lid, char state ) {
-	// cout << "printer: " << kind << ", " << lid << ", " << state << endl;
-
 	insertState(PState(kind, lid, state));
 }
 void Printer::print( Kind kind, unsigned int lid, char state, unsigned int value1) {
-	// cout << "printer: " << kind << ", " << lid << ", "<< state << endl;
-
 	insertState(PState(kind, lid, state, value1));
 }
 void Printer::print( Kind kind, unsigned int lid, char state, unsigned int value1,
-
 	unsigned int value2 ) {
-		// cout << "printer: " << kind << ", " << lid << ", "<< state << endl;
-
 	insertState(PState(kind, lid, state, value1, value2));
 }
 
 // Insert into the buffer, and print accordingly
 void Printer::insertState(PState pState) {
   unsigned int tabCounter = 0; 	  // Used to track how many \t to print
-	unsigned int pos = pState.kind; // position of the state in buffer
-	switch (pState.kind) { // Special index for student, vm, courier
+	unsigned int pos = pState.kind; // position/index of the state in buffer
+	switch (pState.kind) { 					// Special index for student, vm, courier
 		case Courier:
 			pos += numVendingMachines;
 		case Vending:
@@ -81,17 +74,19 @@ void Printer::insertState(PState pState) {
 			pos += 6 + pState.lid - pState.kind;
 			break;
 	} // switch
-	if (buffer[pos].isActive) { // flush and print
-	  tabCounter = 0; // Used to track how many \t to print
+
+	// isActive ? flush and print
+	if (buffer[pos].isActive) {
+		// traverse through the buffer, and print active states
 		for (unsigned int i = 0; i < 6 + numStudents + numCouriers + numVendingMachines; i++) {
 			if (i) tabCounter++;
-		if (!buffer[i].isActive) continue;
+		if (!buffer[i].isActive) continue; // not active => don't print
       
 			// Print all \t, and reset tabCounter
       for ( unsigned int i = 0; i < tabCounter; i++) cout << "\t"; 
       tabCounter = 0;
 
-      // Print the state of Vi
+			// print current state (buffer[pos])
       PState& state = buffer[i];
       cout << state.state;
       switch (state.kind) {
@@ -168,7 +163,4 @@ void Printer::insertState(PState pState) {
 		cout << endl;
 	}
 	buffer[pos] = pState; // Store new state
-
 } // insertState
-
-

@@ -1,4 +1,5 @@
 #pragma once
+
 _Monitor Printer;
 _Task NameServer;
 _Task BottlingPlant;
@@ -9,12 +10,12 @@ _Task Truck {
 	BottlingPlant & plant;
 	const unsigned int numVendingMachines, maxStockPerFlavour, numFlavours = 4;
 	VendingMachine** machineList;
-	int curvm = 0;
+	int curvm = 0; // trakcs next vm to visit
 
 	void main();
   public:
 	Truck( Printer & prt, NameServer & nameServer, BottlingPlant & plant,
-		   unsigned int numVendingMachines, unsigned int maxStockPerFlavour )
-			 : printer(prt), nameServer(nameServer), plant(plant),
-			 numVendingMachines(numVendingMachines), maxStockPerFlavour(maxStockPerFlavour) {};
+		unsigned int numVendingMachines, unsigned int maxStockPerFlavour )
+		: printer(prt), nameServer(nameServer), plant(plant),
+		numVendingMachines(numVendingMachines), maxStockPerFlavour(maxStockPerFlavour) {};
 };

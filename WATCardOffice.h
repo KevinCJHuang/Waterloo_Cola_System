@@ -1,7 +1,7 @@
 #pragma once
 #include "WATCard.h"
 #include <queue>
-#include <uSemaphore.h>
+
 _Monitor Bank;
 _Monitor Printer;
 _Task Courier;
@@ -28,7 +28,7 @@ _Task WATCardOffice {
 					: id(id), parent(parent), printer(printer) {}
 		};					// communicates with bank
 
-		
+		_Event Terminate {};					// shutdown plant
 		unsigned int numCouriers;
 		Bank& bank;
 		Printer& printer;
