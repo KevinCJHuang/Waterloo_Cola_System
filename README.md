@@ -9,9 +9,9 @@
 # Todo List:
 - [x] Groupoff: remove assigned giftcards from random pool
 - [ ] Check print statement locations
-- [ ] investigate student.cc: Assignment says "Watch out for the case of a student who only buys one soda using the gift card."
+- [x] investigate student.cc: Assignment says "Watch out for the case of a student who only buys one soda using the gift card."
 - [x] Error with seed=5, in Appendix 1: Attempt to reset future 0x55f663e3b610 with waiting tasks.
-- [ ] Delete/How each task ends (See piazza @1056)
+- [x] Delete/How each task ends (See piazza @1056)
 - [x] Memory Leak (gift card)
 
 # Appendix

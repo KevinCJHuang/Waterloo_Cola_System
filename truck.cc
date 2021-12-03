@@ -10,40 +10,40 @@ void Truck::main() {
   machineList = nameServer.getMachineList();
   printer.print(Printer::Kind::Truck, 'S');
 
-  unsigned int cargo[numFlavours]; // soda cargo on truck
-  unsigned int cargoRemaining;
   unsigned int i;                  // loop index
-  unsigned int refilled;           // # of stocks refilled at vm
-  unsigned int flavourEmpty;       // # of flavours with 0 soda left in cargo
+  unsigned int cargo[numFlavours]; // soda cargo on truck
+  unsigned int cargoCount;         // Remaining cargo in the truck
+  unsigned int refilledCount;      // # of stocks refilledCount at vm
   unsigned int * stock;            // stock of a vending machine
-  unsigned int stockSize;
+  unsigned int stockSize;          // stock size of a vending machine
   const unsigned int stockCap = maxStockPerFlavour * numFlavours; // capacity of a vm
 
   for ( ;; ) {
-    // _Accept(~Truck) {break;} _Else
-    cargoRemaining = 0;
+    yield(mprng(1, 10));
     try {
-      yield(mprng(1, 10));
-      plant.getShipment(cargo);
-      for (i = 0; i < numFlavours; i++) {
-        cargoRemaining += cargo[i];
+      _Enable{
+        plant.getShipment(cargo);
       }
-      printer.print(Printer::Kind::Truck, 'P', cargoRemaining);
-    } catch (BottlingPlant::Shutdown &) { // Shutdown
-    cout << "truck shut down" << endl;
-      break;
+    } catch (BottlingPlant::Shutdown &) { break; }
+
+    cargoCount = 0;
+    for (i = 0; i < numFlavours; i++) {
+      cargoCount += cargo[i];
     }
+    printer.print(Printer::Kind::Truck, 'P', cargoCount);
 
     for (i = 0 ; i < numVendingMachines; i++) {
-      stockSize = 0;
-      printer.print(Printer::Kind::Truck, 'd', machineList[curvm]->getId(), cargoRemaining);
+      printer.print(Printer::Kind::Truck, 'd', machineList[curvm]->getId(), cargoCount);
+      
+      // Fetch vm's stock and refill the vm
       stock = machineList[curvm]->inventory();
-      for (unsigned int i = 0; i < numFlavours; i++) { // refill vending machine
-        refilled = stock[i] + cargo[i] > maxStockPerFlavour ? 
+      stockSize = 0;
+      for (unsigned int i = 0; i < numFlavours; i++) { 
+        refilledCount = stock[i] + cargo[i] > maxStockPerFlavour ? 
           (maxStockPerFlavour - stock[i]) : cargo[i];
-        stock[i] += refilled;
-        cargo[i] -= refilled;
-        cargoRemaining -= refilled;
+        stock[i] += refilledCount;
+        cargo[i] -= refilledCount;
+        cargoCount -= refilledCount;
         stockSize += stock[i];
       }
       machineList[curvm]->restocked();
@@ -53,7 +53,7 @@ void Truck::main() {
         printer.print(Printer::Kind::Truck, 'U', machineList[curvm]->getId(), stockCap - stockSize);
       }
 
-      printer.print(Printer::Kind::Truck, 'D', machineList[curvm]->getId(), cargoRemaining);
+      printer.print(Printer::Kind::Truck, 'D', machineList[curvm]->getId(), cargoCount);
       curvm = ++curvm % numVendingMachines;
       
       // flat tire
@@ -62,7 +62,7 @@ void Truck::main() {
         yield(10);
       }
 
-      if (cargoRemaining == 0 ) break; // cargo is empty
+      if (cargoCount == 0 ) break; // cargo is empty
     } // for
   }
   printer.print(Printer::Kind::Truck, 'F');

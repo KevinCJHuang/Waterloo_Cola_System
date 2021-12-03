@@ -35,7 +35,9 @@ void BottlingPlant::main() {
 }
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {
-  if (isShutdown) _Resume Shutdown{} _At uThisTask();
+  if (isShutdown) {
+    _Resume Shutdown{} _At uThisTask();
+  }
   for (unsigned int i = 0; i < 4; i++) { 
     cargo[i] = stock[i];
   }
