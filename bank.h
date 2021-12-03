@@ -1,9 +1,7 @@
 #pragma once
 
 _Monitor Bank {
-		unsigned int * studentAccounts; // Records student account balances
-		uCondition * bench;				// Array of uCondition; one bench for each student/courier
-		unsigned int numStudents;
+		unsigned int * studentAccounts; // student account balances
   public:
 		Bank( unsigned int numStudents );
 		~Bank();

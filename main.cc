@@ -45,12 +45,12 @@ int main( int argc, char * argv[] ) {
 		exit( EXIT_FAILURE );
 	} // try
   
-	mprng.set_seed(seed);
   // Init processors
   uProcessor p[processors - 1]; // number of kernel threads
   if ( processors == 1 ) uThisProcessor().setPreemption( 0 );
 
-  processConfigFile(configFile.c_str(), configParms); // Read configs
+  processConfigFile(configFile.c_str(), configParms); // read configs from file
+	mprng.set_seed(seed);	// set mprng seed
 
   // Create everything
 	Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers);
@@ -60,29 +60,32 @@ int main( int argc, char * argv[] ) {
 	Groupoff groupOff(printer, configParms.numStudents, configParms.sodaCost, configParms.groupoffDelay);
 	NameServer nameServer(printer, configParms.numVendingMachines, configParms.numStudents);
 	VendingMachine* vendingMachines [configParms.numVendingMachines];
+
+	// create vm
 	for (unsigned int i = 0; i < configParms.numVendingMachines; i++) {
 		vendingMachines[i] = new VendingMachine(printer, nameServer, i, configParms.sodaCost);
-	}
+	} // for
 	
-	{
+	{	// delete plant before vending machines; plant will be deleted by the end of this block
 		BottlingPlant plant(printer, nameServer,
 			configParms.numVendingMachines, configParms.maxShippedPerFlavour,
 			configParms.maxStockPerFlavour, configParms.timeBetweenShipments);
+		
+		// create students
 		Student* students[configParms.numStudents];
 		for (unsigned int i = 0; i < configParms.numStudents; i++) {
 			students[i] = new Student(printer, nameServer, wOffice, groupOff, i, configParms.maxPurchases);
-		}
+		} // for
 
 		// wait till all students finish and delete them
 		for (unsigned int i = 0; i < configParms.numStudents; i++) {
 			delete students[i];
-		}
-	} // delete plant before vm
+		} // for
+	} // by now, the plant is terminated
 	
-	
+	// wait till all vm finish and delete them
 	for (unsigned int i = 0; i < configParms.numVendingMachines; i++) {
 		delete vendingMachines[i];
-	}
-	malloc_stats();
+	} // for
 } // main
 
