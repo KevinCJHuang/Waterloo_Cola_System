@@ -1,3 +1,46 @@
+Event 6:
+Detail: 
+Input:
+Output:
+Explaination:
+################################################################################
+
+
+################################################################################
+
+
+################################################################################
+
+################################################################################
+
+
+################################################################################
+
+Event 6:
+Detail: 
+Input:
+Output:
+Explaination:
+################################################################################
+
+
+
+
+1. memory leak once in a while (unused gift card)
+2. Advertisement right after transfer => show balance = remaining + 5 + sodaCost
+3. It's possible to L twice/multiple times in a row
+	- Check Courier output
+4. Consecutive free (advertisement) should show the same balance
+	- Check vm output
+5. If a student chooses a wat-card for his/her first purchase since the gift card is not delivered yet, and the vm runs out of stock, then when he/she visits another vm, he/she will select card again and may select the prioritized gift card.
+6. In a delivery run, if the truck has visited all the vms once and still has stocks, it will stop visiting vms, but visiting the plant instead to pick up new stocks. All the undelivered cargo from last run will be deleted.
+7. Nameserver assigns students in round robin order initially, and moves each student to the next vm accordingly when getMachine() is called
+8. 
+
+
+
+
+
 Event 1:Group members tried to match program outputs with sample outputs
 Detail: After the program complied, my team started to debug. We used to believe that our output
         needs to call mprng in the same order as the sample's. We spent about 5 days on to fix 
