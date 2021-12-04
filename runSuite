@@ -6,7 +6,7 @@ echo "seed is" $seed
 
 for (( c=1; c<=1; c++ ))
 do  
-    ./soda d $seed > output.txt
+    ./soda d $seed
 done
 
 ./sodaAnswer d $seed > answer.txt
