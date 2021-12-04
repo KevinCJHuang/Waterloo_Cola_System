@@ -16,15 +16,16 @@ Detail: groupOff should initialize each student's WATCard in random order. We us
         but the corresponding WATCard is initialized only once. We later discovered that this is wrong. 
         We should remove an id once it is used so that no id is chosen twice. We fixed this problem by 
         swapping the chosen id with the current last id in the list and decrease the list size by 1. 
-Input: 
+Input: ./soda d 10
 Output:
-Explaination: 
+Explaination: After fixing this problem, the order giftcards being generated should be different but this
+              does not show in the output because GroupOff does not printer the id of students receive a giftcard.
 ################################################################################
 
 Event 3: Decide where to yield in BottlingPlant
 Detail: We were not sure whether the BottlingPlant needs to yield beofre the first production and attended 
         an office hour to clarify that. The answer is that BottlingPlant needs to yield before each production.
-Input:
+Input: ./soda d 10
 Outp
 Explaination: Outputs Gb and P genereated by Plant are always sepreate in a few lines. That means BottlingPlant 
               does not finish generating bottles righ after it prints Gb. This is realized by letting BottlingPlant 
@@ -36,7 +37,7 @@ Detail: We found that Truck always prints very large number after a few deliveri
         we found two issues related with this problem. The first one is that we did not initialize a variable. The 
         second one is that we forgot to reset stocks and that causes another unsigned int variable became negative. 
         Since it is an unsigned int, it underflows.
-Input:
+Input: ./soda d 10
 Output:
 Explaination: After correcting the mistakes, Truck always prints correct positive numbers. 
 ################################################################################
@@ -45,9 +46,8 @@ Event 5: All students received the same gift card
 Detail: We accidentally created two counter variables with the same name, one in .h file and the other in 
         Groupoff::main(). We increased the local scope counter but deliver giftcards using the counter that 
         is created in .h. As a result, everyone receives the first giftcard in the list. Wefixed this problem 
-        by deleting the counter variable in the . 
-        
-Input:
+        by deleting the counter variable in GroupOff::main(). 
+Input: ./soda d 10
 Output:
 Explaination: Before fixing this problem, our program always end with exceptions. The reason is that students 
               delete their giftcard after using them. Since everyone gets the same giftcard, everyone was deleting
