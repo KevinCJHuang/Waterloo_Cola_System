@@ -1,3 +1,120 @@
+Please use Tab Size = 8 for better reading experience.
+################################################################################
+Event 1: Unused giftcards causing memory leak
+Detail: We implemented Student to delete a giftcard after a giftcard is used. However,
+        in some rare cases, student(s) may only need to make one purchase and the student 
+	uses WATCard to purchase. In those cases, some giftcards will not be deleted 
+	because nobody uses them. Thus, memory leak happens. The above situation does
+	not happen often and when it happens, the size of memory leak is usually 32 bytes 
+	but can be 32*n bytes. This problem can be fixed by letting Student deleting unused 
+        giftcards when they finishes. 
+Input:  ./soda d 30
+Output:
+Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+S       S       S       S               S       S0,1    S0,2    S2                      S
+                C0,5    R0      S                                       S2
+D0,3            W       R1              G9                                      S2      t0,5
+                C1,5    R2                      V0
+D0,1                    N0,0                            V1
+                        N1,1    P9
+                                d0,9    P                       r
+                                U0,11
+D0,2    D2      W               D0,0    G7                      R                       T0,5
+                                P7                                                      t1,5
+                                d1,7    P                       B0,0    r
+                                U1,13
+D1,3                            D1,0    G5      B0,3                    R
+D1,3    D2                                              G0,0            B0,0
+        F                       P5                      V2                              T1,5
+D1,1                    N1,2    d2,5    P       F                               r
+...
+Explaination: Stud0 prints S0,1 and that means that they only need to make one purchase. Later, Stud0 prints 
+              B0,3 then prints F. These two outputs indicate that Stud0 uses a WATCard to make one purchase 
+              then finished. If the program does not delete Stud0's giftcard properly, a memory leak of 32 
+              bytes will be printed at the bottom. However, our program ends without such outputs that means 
+              our program is implemented correctly. 
+
+################################################################################
+Event 2: A WATCars is lost multiple times in a roll
+Detail: When a student wants to make a purchase with a WATCard that has insufficient balance, 
+        the student will need to charge it. A courier may lose the WATCard in that process. 
+	Student will gets an exception and wants to get a new WATCard. The courier may lose the
+	new WATCard as well.
+Input:  ./soda d 33
+Output:
+arent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+S       S       S       S               S       S3,2    S0,7    S2                      S
+                C0,5    R0      S                                       S2
+D1,3            W       R1              G5                                      S2      t0,5
+                C1,5    R2                      V0
+D0,2                    N0,0                            V1
+D0,3                    N1,1    P5
+        D2      W               d0,5                                                    L0
+                                U0,15   P                       r                       t1,5
+D1,1                            D0,0    G8                      R
+                                P8
+                                d1,8    P       G3,0            B3,1    r
+                                U1,12
+D1,1            C0,5            D1,0    G7      L                       R
+                                P7
+        D2                      d2,7
+        F       W                                                                       T1,5
+                                U2,13   P                                       r       t0,5
+                                D2,0    G3              G0,0            B0,2    R
+                                P3
+D1,2                            d0,3    P                       r
+                                U0,13
+D1,1                            D0,0    G8                      R
+                                P8
+D1,1                            d1,8    P               B0,3            B0,1
+                                U1,6    G5                              r
+                                D1,0                                    R
+D1,2                            P5                      B0,1            B0,3
+D0,2            T1,7            d2,5    P                                       r
+                                U2,9
+                                D2,1
+                                d0,1    G1                      r               R
+                                U0,12
+D0,3            W               D0,0                            R                       L0
+                C0,5            P1              L                                       t1,7
+D1,1            W               d1,1    P                               r               T1,7
+                                U1,7                                                    t0,5
+                                D1,1
+                                d2,1    G6                              R       r
+                                U2,8
+D0,1                            D2,0                    B0,6            B0,2    R
+                                P6
+                                d0,6    P                       r
+                                U0,7
+                                D0,1
+D1,3                            d1,1    G6                      R       r
+                                U1,7
+                                D1,0                                    R
+D0,2                            P6                      B0,4            B0,1
+                                d2,6    P                               B0,0    r
+                                U2,3
+                                D2,1
+D0,2                            d0,1    G2              B0,2    r               R
+                                U0,6
+                                D0,0                            R                       T0,5
+                                P2              B3,3            B3,4
+D1,3                            d1,2    P                               r
+                                U1,8
+                                D1,1
+                                d2,1    G3                              R       r
+                                U2,3
+                                D2,1
+D0,1                            d0,1                    V2      r               R
+                                U0,6
+D0,1                    N1,2    D0,0            F               R
+...
+Explaination: Cour0 prints t0,5. This means that student 0 wants to transfer 5 dollars. Cour0 then prints
+              L0, meaning that WATCard is lost. Later, Cour0 prints t0,5 again. Implies the card is lost 
+              again. Stud0 receives these messages and prints two L next to each other. After that, Stud0 
+              prints B3,3 and F. That means we properly implemented our program and Stud0 ends properly. 
+
 ################################################################################
 Event 3:  transfer() followed by Free (advertisement)
 Detail :  After a student calls transfer(), its wat-card balance will be increased
@@ -7,7 +124,7 @@ Detail :  After a student calls transfer(), its wat-card balance will be increas
           This event is worth notice because it increases wat-card balance by a lot,
           when its balance is printed by the student.
 Input:    Use default soda.config as given in the assignment
-					./soda d 22370
+	  ./soda d 22370
 Output:   The output of Stud0 illustrates this event.
 
 Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
@@ -38,51 +155,144 @@ Explaination: This output shows that Stud0 runs out of money after his/her B2,0 
 
 ################################################################################
 Event 4:  Consecutive free event should show the same balance
-Detail :  If a student consecutively receives free advertisement
-          by $5 + sodaCost. If the student continues its loop and attempts to purchase
-          the next drink, and the vm offers a free drink (i.e. raises Free exception),
-          then the student should print his/her balance = remaining + $5 + sodaCost.
-          This event is worth notice because it increases wat-card balance by a lot,
-          when its balance is printed by the student.
+Detail :  If a student consecutively receives free advertisement, it should 
+          print A/a with the same balance in all consecutive free events. This is
+          to make sure that consecutive free events behave as expected (i.e., not
+          charging student money)
 Input:    Use default soda.config as given in the assignment
-					./soda d 22370
-Output:   The output of Stud0 illustrates this event.
+	  ./soda d 32459
+Output:   The output of Stud1 illustrates this event.
 
 Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
 ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
 ...
-D0,2                            d1,2                    B0,0    R       r       B0,4
-                                U1,6
-D1,1                            D1,1            B2,0                    R       B2,4
-                                P6
-                                d2,6    P               F                       r
-                                D2,4
-D0,2                            d0,4    G4                      r               R
-                                D0,4
-                                d1,4                            R       r
-                                U1,3
-D1,3            T0,7            D1,1                                    R
-                W                                                                       t0,7
-D1,2                            P4              A2,7                            A       T0,7
-D1,3                            d2,4    P       B2,5                            B2,3
-                                U2,1    G3      F                               r
-                                D2,3
+                                d0,3                    B1,3    r       B1,4    R
+D1,2                            D0,3                            R
+D1,1                            P7                                      A
+D0,2                            d1,7    P               A1,3            r
+                                D1,5    G2
+                                d2,5                                    R       r
+                                D2,5
+D0,1                            d0,5                    A1,3    r       A       R
+D0,1                            D0,5                    B1,1    R       B1,3
 ...
 
-Explaination: This output shows that Stud0 runs out of money after his/her B2,0 purchase.
-              After he/she calls transfer() from WATCardOffice, its balance turns to be
-	      $5 + sodaCost = $7. Then, he/she gets a free drink, and A2,7 reflects this
-	      change in wat-card balance.
+Explaination: When Stud1 is lucky enough to get two free drinks in a row, the vm doesn't0
+              charge him any money, which is shown by the two A1,3 printed msg.
+################################################################################
+Event 5:  Prioritize the use of gift card when gift card arrives later then wat-card
+Detail :  If a student chooses a wat-card for his/her first purchase because the gift
+          card is not delivered yet, and the vm runs out of stock, then when he/she
+	  visits another vm, he/she will select card again. If the gift card arrives
+	  by now, then he/she should prioritiz the gift card.
+Input  :  N/A
+Output :  N/A
+Explaination: There is no way to know whether this feature is implemented correctly
+              from io testing. This is because
+	      1) if a student prints in the seemingly wrong sequence of B -> V -> G,
+	         it could be because the gift card arrives very late, with no switch
+		 of chosen card.
+	      2) if a student prints in the seemingly right sequence of V -> G,
+	         it could be because the gift card arrives very early, with no switch
+		 of chosen card.
+	      Therefore, we could only check the correctness with gdb, without
+	      normal io.
+
+################################################################################
+Event 6:  Truck delivery when all vms are visited and there are remaining cargos
+Detail :  In a delivery run, if the truck has visited all the vms once and still
+          has stocks, it will stop visiting vms, but visiting the plant instead
+	  to pick up new stocks. All the undelivered cargo from last run will be deleted.
+Input:    Use default soda.config as given in the assignment, except set MaxPurchases=80
+          to make the program run longer to make more deliveries to fill up vm.
+	  ./soda d 32614
+Output:   The output of Stud1 illustrates this event.
+
+Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+...
+                                d1,6    G3      L               R       r
+                                U1,5
+                                D1,6
+D0,3            C0,5            d2,6                            A       R       r
+                W                                                                       t0,5
+                                U2,5                    A0,3                            T0,5
+D0,1                            D2,6            B0,3            B0,1            R
+                                P3
+                                d0,3    P               B0,1    B0,0
+D1,1                    N0,1            G5      V1
+D0,3                            U0,5                            r
+                                D0,3
+D1,1                    N0,2    d1,3            V2              R       r
+                                U1,5
+                                D1,3
+                T1,7            d2,3            V0                      R
+                W                                                                       t1,7
+D1,2                    N0,0    U2,5            V1                              r       T1,7
+                        N0,1    D2,3                    V1                      R
+D0,2                    N1,1    P5
+                        N0,2    d0,5    P       V2              r
+...
+Explaination: When the plant produces 3 bottles (G3), the truck picks up the three bottles (P3),
+              and visits all three vm to restore their stock (d0,3 -> U0,3 -> ... -> U2,5 -> D2,3).
+	      After visiting all three vms, there are still 3 bottles in cargo (D2,3).
+	      The truck stops visiting more vms, and returns to the plant to pick up new cargo
+	      (P5). After the pick up, it throws away old cargo, which is shown by
+	      (P5 -> d0,5), where # in cargo == # picked up.
 
 
+################################################################################
+Event 7:  Nameserver round robin order
+Detail :  Nameserver should assign students in round robin order initially, and
+          moves each student to the next vm accordingly when getMachine() is called
+Input:    Use default soda.config as given in the assignment, except
+          set NumStudents=5, which is larger than NumVendingMachines=3.
+	  This checks whether initial assignment is in round robin order.
+	  ./soda d 27123
+Output:   The output of the five students illustrates this event.
 
-Lichen:
+Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Stud2   Stud3   Stud4   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+...
+S       S       S       S               S       S3,5    S0,4    S2,4    S3,8    S2,5    S2                      S
+                C0,5    R0      S                                                               S2
+D2,1            W       R1              G3                                                              S2      t0,5
+                C1,5    R2
+                C2,5            P3              V0
+D2,1            C3,5    N0,0    d0,3    P               V1                              r
+                                U0,17
+                C4,5    N1,1    D0,0    G7                      V2                      R
+D0,3                    N2,2                                            V0
+                        N3,0                                                    V1
+...
 
-4. Consecutive free (advertisement) should show the same balance
-	- Check vm output
-5. If a student chooses a wat-card for his/her first purchase since the gift card is not delivered yet, and the vm runs out of stock, then when he/she visits another vm, he/she will select card again and may select the prioritized gift card.
-6. In a delivery run, if the truck has visited all the vms once and still has stocks, it will stop visiting vms, but visiting the plant instead to pick up new stocks. All the undelivered cargo from last run will be deleted.
-7. Nameserver assigns students in round robin order initially, and moves each student to the next vm accordingly when getMachine() is called
-8. How truck deals with flat tire
+Explaination: This output shows that the students are assign vending machine numbers in round robin order
+              (V0 -> V1 -> V2 -> V0 -> V1). On the other side, when they call getMachine(), the name server
+	      also gives them the next vending machine in their order (output is too long to show in this testdoc).
+	      For example, Stud0 has visited V0->V1->V2->V0. Thus, the output shows that the program is correct.
 
+################################################################################
+Event 8:  Truck may have flat tire after delivery to each vm, not after a full run 
+Detail :  A truck may flat tire after its delivery to each vm, instead of only
+          have flat tires after an entire production run (i.e., visited all vms
+	  or out of cargo)
+Input:    Use default soda.config as given in the assignment
+	  ./soda d 1159
+Output:   The output of the truck illustrates this event.
+
+Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+...
+                                P2
+D1,2                            d2,2    P                                       r
+                                D2,2
+                T0,7            X       G8                                      R
+D0,2            W                                                                       t0,7
+                                                B3,6            B3,2                    T0,7
+D1,3                            d0,2            F               r
+                                U0,2
+...
+
+Explaination: The output shows that the truck encounters a flat tire after delivering to V2,
+              and then it continues its delivery to V0.
 
