@@ -3,11 +3,11 @@ clear
 make soda 
 seed=$((1 + $RANDOM))
 echo "seed is" $seed
-
-for (( c=1; c<=1; c++ ))
-do  
-    ./soda d $seed
-done
+./soda d $seed
+# for (( c=1; c<=1; c++ ))
+# do  
+#     ./soda d $seed
+# done
 
 ./sodaAnswer d $seed > answer.txt
 
