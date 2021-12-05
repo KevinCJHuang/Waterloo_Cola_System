@@ -61,9 +61,11 @@ void Student::main() {
       yield(4);
       continue; // to skip yield; Free doesn't need to yield
     } // try
-    yield(mprng(1, 10)); // yiled before next purchase
+    if (purchased != numPurchases) yield(mprng(1, 10)); // yiled before next purchase
   } // for
-  delete watCard(); // delete watCard, no matter it's used or not
+  try {
+    delete watCard(); // delete watCard, no matter it's used or not
+  } catch (WATCardOffice::Lost&) { } // if card is lost, do nothing
   if (giftCard.available()) delete giftCard(); // delete gift card if it is not used
   printer.print(Printer::Kind::Student, id, 'F');
 }

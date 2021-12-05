@@ -1,0 +1,88 @@
+################################################################################
+Event 3:  transfer() followed by Free (advertisement)
+Detail :  After a student calls transfer(), its wat-card balance will be increased
+          by $5 + sodaCost. If the student continues its loop and attempts to purchase
+          the next drink, and the vm offers a free drink (i.e. raises Free exception),
+          then the student should print his/her balance = remaining + $5 + sodaCost.
+          This event is worth notice because it increases wat-card balance by a lot,
+          when its balance is printed by the student.
+Input:    Use default soda.config as given in the assignment
+					./soda d 22370
+Output:   The output of Stud0 illustrates this event.
+
+Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+...
+D0,2                            d1,2                    B0,0    R       r       B0,4
+                                U1,6
+D1,1                            D1,1            B2,0                    R       B2,4
+                                P6
+                                d2,6    P               F                       r
+                                D2,4
+D0,2                            d0,4    G4                      r               R
+                                D0,4
+                                d1,4                            R       r
+                                U1,3
+D1,3            T0,7            D1,1                                    R
+                W                                                                       t0,7
+D1,2                            P4              A2,7                            A       T0,7
+D1,3                            d2,4    P       B2,5                            B2,3
+                                U2,1    G3      F                               r
+                                D2,3
+...
+
+Explaination: This output shows that Stud0 runs out of money after his/her B2,0 purchase.
+              After he/she calls transfer() from WATCardOffice, its balance turns to be
+	      $5 + sodaCost = $7. Then, he/she gets a free drink, and A2,7 reflects this
+	      change in wat-card balance.
+
+################################################################################
+Event 4:  Consecutive free event should show the same balance
+Detail :  If a student consecutively receives free advertisement
+          by $5 + sodaCost. If the student continues its loop and attempts to purchase
+          the next drink, and the vm offers a free drink (i.e. raises Free exception),
+          then the student should print his/her balance = remaining + $5 + sodaCost.
+          This event is worth notice because it increases wat-card balance by a lot,
+          when its balance is printed by the student.
+Input:    Use default soda.config as given in the assignment
+					./soda d 22370
+Output:   The output of Stud0 illustrates this event.
+
+Parent  Gropoff WATOff  Names   Truck   Plant   Stud0   Stud1   Mach0   Mach1   Mach2   Cour0
+******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* *******
+...
+D0,2                            d1,2                    B0,0    R       r       B0,4
+                                U1,6
+D1,1                            D1,1            B2,0                    R       B2,4
+                                P6
+                                d2,6    P               F                       r
+                                D2,4
+D0,2                            d0,4    G4                      r               R
+                                D0,4
+                                d1,4                            R       r
+                                U1,3
+D1,3            T0,7            D1,1                                    R
+                W                                                                       t0,7
+D1,2                            P4              A2,7                            A       T0,7
+D1,3                            d2,4    P       B2,5                            B2,3
+                                U2,1    G3      F                               r
+                                D2,3
+...
+
+Explaination: This output shows that Stud0 runs out of money after his/her B2,0 purchase.
+              After he/she calls transfer() from WATCardOffice, its balance turns to be
+	      $5 + sodaCost = $7. Then, he/she gets a free drink, and A2,7 reflects this
+	      change in wat-card balance.
+
+
+
+Lichen:
+
+4. Consecutive free (advertisement) should show the same balance
+	- Check vm output
+5. If a student chooses a wat-card for his/her first purchase since the gift card is not delivered yet, and the vm runs out of stock, then when he/she visits another vm, he/she will select card again and may select the prioritized gift card.
+6. In a delivery run, if the truck has visited all the vms once and still has stocks, it will stop visiting vms, but visiting the plant instead to pick up new stocks. All the undelivered cargo from last run will be deleted.
+7. Nameserver assigns students in round robin order initially, and moves each student to the next vm accordingly when getMachine() is called
+8. How truck deals with flat tire
+
+
