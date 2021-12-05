@@ -1,14 +1,22 @@
 Please use Tab Size = 8 to read this file.
 ################################################################################
-Event 1:
-Detail: 
-Input:
+Event 1: Unsigned giftcards causing memory leak
+Detail: We implemented Student to delete a giftcard after a giftcard is used. However,
+        in some rare cases, student(s) may only need to make one purchase and the student 
+	uses WATCard to purchase. In those cases, some giftcards will not be deleted 
+	because nobody uses them. Thus, memory leak happens. The above situation does
+	not happen often and when it happens, the size of memory leak is usually 32 bytes 
+	but can be 32*n bytes.
+Input: ./soda d 
 Output:
 Explaination:
 ################################################################################
-Event 2:
-Detail: 
-Input:
+Event 2: A WATCars is lost multiple times in a roll
+Detail: When a student wants to make a purchase with a WATCard that has insufficient balance, 
+        the student will need to charge it. A courier may lose the WATCard in that process. 
+	Student will gets an exception and wants to get a new WATCard. The courier may lose the
+	new WATCard as well.
+Input: ./soda d 
 Output:
 Explaination:
 
