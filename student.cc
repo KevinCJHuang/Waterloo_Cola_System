@@ -30,6 +30,7 @@ void Student::main() {
 
   // start purchases
   bool giftCardPurchase;         // track card used for VendingMachine::Free print msg
+  bool giftCardUsedOnce = false;
   yield(mprng(1, 10));           // yiled before first purchase
   for (unsigned int purchased = 0; purchased < numPurchases; ) {
     try {
@@ -39,6 +40,7 @@ void Student::main() {
         printer.print(Printer::Kind::Student, id, 'G', favFlavour, (*giftCard).getBalance());
         delete giftCard;
         giftCard.reset();        // Discard gift card
+        giftCardUsedOnce = true;
       } or _Select (watCard) {     // Wait for WATCard
         giftCardPurchase = false;
         vm->buy( favFlavour, *watCard ); // make the purchase
@@ -66,7 +68,8 @@ void Student::main() {
   try {
     delete watCard(); // delete watCard, no matter it's used or not
   } catch (WATCardOffice::Lost&) { } // if card is lost, do nothing
-  if (giftCard.available()) delete giftCard(); // delete gift card if it is not used
+  if (!giftCardUsedOnce) delete giftCard(); // delete gift card if it is not used
+   
   printer.print(Printer::Kind::Student, id, 'F');
 }
 
