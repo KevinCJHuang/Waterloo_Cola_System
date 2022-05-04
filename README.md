@@ -1,5 +1,7 @@
 ## WATCola - Waterloo Cola System
-WATCola is a concurrent, multi-threaded system that simulates the purchasing of soft drinks in vending machines in Waterloo. In WATCola, the following main objects(characters) act simultaneously to interact with each other:
+WATCola is a concurrent, multi-threaded system that simulates the purchasing of soft drinks in vending machines in Waterloo.
+
+In WATCola, the following main objects(characters) act concurrently to interact with each other:
 * `VendingMachine`: accepts the request to sell soft drinks to a `Student`, and charge money accordingly from their `WatCard`.
 * `BottlingPlant`: produces soft drinks
 * `Truck`: loads soft drinks from `BottlingPlant`, and refills soft drinks to all `VendingMachines`
